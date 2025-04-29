@@ -24,29 +24,29 @@ selected_turret = None
 
 #load images
 #map
-map_image = pg.image.load('pygame_tower_defencse/levels/level.png').convert_alpha()
+map_image = pg.image.load('Python/pygame_tower_defencse/levels/level.png').convert_alpha()
 #turret spritesheets
 turret_spritesheets = []
 for x in range(1, c.TURRET_LEVELS + 1):
-  turret_sheet = pg.image.load(f'pygame_tower_defencse/assets/images/turrets/turret_{x}.png').convert_alpha()
+  turret_sheet = pg.image.load(f'Python/pygame_tower_defencse/assets/images/turrets/turret_{x}.png').convert_alpha()
   turret_spritesheets.append(turret_sheet)
 #individual turret image for mouse cursor
-cursor_turret = pg.image.load('pygame_tower_defencse/assets/images/turrets/cursor_turret.png').convert_alpha()
+cursor_turret = pg.image.load('Python/pygame_tower_defencse/assets/images/turrets/cursor_turret.png').convert_alpha()
 #enemies
 enemy_images = {
-  "weak": pg.image.load('pygame_tower_defencse/assets/images/enemies/enemy_1.png').convert_alpha(),
-  "medium": pg.image.load('pygame_tower_defencse/assets/images/enemies/enemy_2.png').convert_alpha(),
-  "strong": pg.image.load('pygame_tower_defencse/assets/images/enemies/enemy_3.png').convert_alpha(),
-  "elite": pg.image.load('pygame_tower_defencse/assets/images/enemies/enemy_4.png').convert_alpha()
+  "weak": pg.image.load('Python/pygame_tower_defencse/assets/images/enemies/enemy_1.png').convert_alpha(),
+  "medium": pg.image.load('Python/pygame_tower_defencse/assets/images/enemies/enemy_2.png').convert_alpha(),
+  "strong": pg.image.load('Python/pygame_tower_defencse/assets/images/enemies/enemy_3.png').convert_alpha(),
+  "elite": pg.image.load('Python/pygame_tower_defencse/assets/images/enemies/enemy_4.png').convert_alpha()
 }
 #buttons
-buy_turret_image = pg.image.load('pygame_tower_defencse/assets/images/buttons/buy_turret.png').convert_alpha()
-cancel_image = pg.image.load('pygame_tower_defencse/assets/images/buttons/cancel.png').convert_alpha()
-upgrade_turret_image = pg.image.load('pygame_tower_defencse/assets/images/buttons/upgrade_turret.png').convert_alpha()
-begin_image = pg.image.load('pygame_tower_defencse/assets/images/buttons/begin.png').convert_alpha()
+buy_turret_image = pg.image.load('Python/pygame_tower_defencse/assets/images/buttons/buy_turret.png').convert_alpha()
+cancel_image = pg.image.load('Python/pygame_tower_defencse/assets/images/buttons/cancel.png').convert_alpha()
+upgrade_turret_image = pg.image.load('Python/pygame_tower_defencse/assets/images/buttons/upgrade_turret.png').convert_alpha()
+begin_image = pg.image.load('Python/pygame_tower_defencse/assets/images/buttons/begin.png').convert_alpha()
 
 #load json data for level
-with open('pygame_tower_defencse/levels/level.tmj') as file:
+with open('Python/pygame_tower_defencse/levels/level.tmj') as file:
   world_data = json.load(file)
 
 #load fonts for displaying text on the screen
