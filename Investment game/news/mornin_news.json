@@ -1,0 +1,410 @@
+{
+    "K-전자": {
+      "morning_news": [
+        {
+          "news": "K-전자, 신제품 출시로 매출 급증",
+          "sentiment": "positive",
+          "probability": {
+            "increase": 0.7,
+            "decrease": 0.2,
+            "no_change": 0.1
+          }
+        },
+        {
+          "news": "K-전자, 공급망 문제로 생산 차질",
+          "sentiment": "negative",
+          "probability": {
+            "increase": 0.1,
+            "decrease": 0.7,
+            "no_change": 0.2
+          }
+        },
+        {
+          "news": "K-전자, 새로운 합작 투자 발표",
+          "sentiment": "positive",
+          "probability": {
+            "increase": 0.6,
+            "decrease": 0.3,
+            "no_change": 0.1
+          }
+        },
+        {
+          "news": "K-전자, 경쟁사의 가격 인하로 위기",
+          "sentiment": "negative",
+          "probability": {
+            "increase": 0.2,
+            "decrease": 0.6,
+            "no_change": 0.2
+          }
+        },
+        {
+          "news": "K-전자, 스마트폰 사업 확대 계획 발표",
+          "sentiment": "positive",
+          "probability": {
+            "increase": 0.8,
+            "decrease": 0.1,
+            "no_change": 0.1
+          }
+        }
+      ]
+    },
+    "금": {
+      "morning_news": [
+        {
+          "news": "금 가격 하락, 금리 인상 우려",
+          "sentiment": "negative",
+          "probability": {
+            "increase": 0.2,
+            "decrease": 0.7,
+            "no_change": 0.1
+          }
+        },
+        {
+          "news": "금, 글로벌 불확실성 덕분에 상승",
+          "sentiment": "positive",
+          "probability": {
+            "increase": 0.8,
+            "decrease": 0.1,
+            "no_change": 0.1
+          }
+        },
+        {
+          "news": "금, 중앙은행 금리 동결 발표로 가격 상승",
+          "sentiment": "positive",
+          "probability": {
+            "increase": 0.7,
+            "decrease": 0.2,
+            "no_change": 0.1
+          }
+        },
+        {
+          "news": "금 가격 급등, 경기 불확실성 때문",
+          "sentiment": "positive",
+          "probability": {
+            "increase": 0.8,
+            "decrease": 0.1,
+            "no_change": 0.1
+          }
+        },
+        {
+          "news": "금 가격 급락, 증시 안정세로 투자자 이탈",
+          "sentiment": "negative",
+          "probability": {
+            "increase": 0.1,
+            "decrease": 0.8,
+            "no_change": 0.1
+          }
+        }
+      ]
+    },
+    "비트코인": {
+      "morning_news": [
+        {
+          "news": "비트코인, 글로벌 불확실성 덕분에 상승세",
+          "sentiment": "positive",
+          "probability": {
+            "increase": 0.6,
+            "decrease": 0.2,
+            "no_change": 0.2
+          }
+        },
+        {
+          "news": "비트코인, 정부 규제 우려로 가격 하락",
+          "sentiment": "negative",
+          "probability": {
+            "increase": 0.2,
+            "decrease": 0.7,
+            "no_change": 0.1
+          }
+        },
+        {
+          "news": "비트코인, 디지털 자산 수요 증가로 가격 급등",
+          "sentiment": "positive",
+          "probability": {
+            "increase": 0.7,
+            "decrease": 0.1,
+            "no_change": 0.2
+          }
+        },
+        {
+          "news": "비트코인, 법적 규제 강화로 가격 급락",
+          "sentiment": "negative",
+          "probability": {
+            "increase": 0.1,
+            "decrease": 0.8,
+            "no_change": 0.1
+          }
+        },
+        {
+          "news": "비트코인, 금융기관 투자 확대",
+          "sentiment": "positive",
+          "probability": {
+            "increase": 0.8,
+            "decrease": 0.1,
+            "no_change": 0.1
+          }
+        }
+      ]
+    },
+    "부동산": {
+      "morning_news": [
+        {
+          "news": "부동산 시장, 공급 과잉 우려로 가격 하락",
+          "sentiment": "negative",
+          "probability": {
+            "increase": 0.1,
+            "decrease": 0.8,
+            "no_change": 0.1
+          }
+        },
+        {
+          "news": "부동산 시장, 가격 안정세로 회복",
+          "sentiment": "positive",
+          "probability": {
+            "increase": 0.7,
+            "decrease": 0.2,
+            "no_change": 0.1
+          }
+        },
+        {
+          "news": "부동산, 금리 인상으로 가격 하락",
+          "sentiment": "negative",
+          "probability": {
+            "increase": 0.2,
+            "decrease": 0.7,
+            "no_change": 0.1
+          }
+        },
+        {
+          "news": "부동산, 정부 규제 완화로 가격 상승",
+          "sentiment": "positive",
+          "probability": {
+            "increase": 0.8,
+            "decrease": 0.1,
+            "no_change": 0.1
+          }
+        },
+        {
+          "news": "부동산 시장, 공급 부족으로 가격 급등",
+          "sentiment": "positive",
+          "probability": {
+            "increase": 0.9,
+            "decrease": 0.05,
+            "no_change": 0.05
+          }
+        }
+      ]
+    },
+    "농업": {
+      "morning_news": [
+        {
+          "news": "농업, 새로운 기술 도입으로 수확량 증가",
+          "sentiment": "positive",
+          "probability": {
+            "increase": 0.7,
+            "decrease": 0.2,
+            "no_change": 0.1
+          }
+        },
+        {
+          "news": "농업, 기후 변화로 작물 생산 감소 우려",
+          "sentiment": "negative",
+          "probability": {
+            "increase": 0.1,
+            "decrease": 0.8,
+            "no_change": 0.1
+          }
+        },
+        {
+          "news": "농업, 유전자 변형 작물의 상용화로 생산 증가",
+          "sentiment": "positive",
+          "probability": {
+            "increase": 0.6,
+            "decrease": 0.3,
+            "no_change": 0.1
+          }
+        },
+        {
+          "news": "농업, 가격 변동성에 따른 투자자 우려",
+          "sentiment": "negative",
+          "probability": {
+            "increase": 0.2,
+            "decrease": 0.7,
+            "no_change": 0.1
+          }
+        },
+        {
+          "news": "농업, 친환경 농업 확대 기대감",
+          "sentiment": "positive",
+          "probability": {
+            "increase": 0.8,
+            "decrease": 0.1,
+            "no_change": 0.1
+          }
+        }
+      ]
+    },
+    "애플": {
+      "morning_news": [
+        {
+          "news": "애플, 신제품 출시로 큰 매출 기대",
+          "sentiment": "positive",
+          "probability": {
+            "increase": 0.7,
+            "decrease": 0.2,
+            "no_change": 0.1
+          }
+        },
+        {
+          "news": "애플, 공급망 문제로 생산 차질",
+          "sentiment": "negative",
+          "probability": {
+            "increase": 0.2,
+            "decrease": 0.6,
+            "no_change": 0.2
+          }
+        },
+        {
+          "news": "애플, 새로운 혁신 기술 발표",
+          "sentiment": "positive",
+          "probability": {
+            "increase": 0.8,
+            "decrease": 0.1,
+            "no_change": 0.1
+          }
+        },
+        {
+          "news": "애플, 중국 내 시장 점유율 감소",
+          "sentiment": "negative",
+          "probability": {
+            "increase": 0.1,
+            "decrease": 0.7,
+            "no_change": 0.2
+          }
+        },
+        {
+          "news": "애플, 전 세계 매출 증가 예상",
+          "sentiment": "positive",
+          "probability": {
+            "increase": 0.7,
+            "decrease": 0.2,
+            "no_change": 0.1
+          }
+        }
+      ]
+    },
+    "에너지": {
+      "morning_news": [
+        {
+          "news": "에너지 시장, 가격 급등으로 수익 증가 전망",
+          "sentiment": "positive",
+          "probability": {
+            "increase": 0.7,
+            "decrease": 0.2,
+            "no_change": 0.1
+          }
+        },
+        {
+          "news": "에너지 공급 부족 우려, 가격 급등",
+          "sentiment": "positive",
+          "probability": {
+            "increase": 0.8,
+            "decrease": 0.1,
+            "no_change": 0.1
+          }
+        },
+        {
+          "news": "에너지 가격 하락, 석유 생산량 증가",
+          "sentiment": "negative",
+          "probability": {
+            "increase": 0.1,
+            "decrease": 0.7,
+            "no_change": 0.2
+          }
+        },
+        {
+          "news": "에너지, 신재생 에너지 사업 확대 발표",
+          "sentiment": "positive",
+          "probability": {
+            "increase": 0.8,
+            "decrease": 0.1,
+            "no_change": 0.1
+          }
+        },
+        {
+          "news": "에너지, 전 세계적인 에너지 위기 우려",
+          "sentiment": "negative",
+          "probability": {
+            "increase": 0.2,
+            "decrease": 0.7,
+            "no_change": 0.1
+          }
+        }
+      ]
+    },
+    "건설": {
+      "morning_news": [
+        {
+          "news": "건설업계, 정부의 대규모 인프라 투자 발표",
+          "sentiment": "positive",
+          "probability": {
+            "increase": 0.7,
+            "decrease": 0.2,
+            "no_change": 0.1
+          }
+        },
+        {
+          "news": "건설, 원자재 가격 상승으로 비용 부담 증가",
+          "sentiment": "negative",
+          "probability": {
+            "increase": 0.1,
+            "decrease": 0.8,
+            "no_change": 0.1
+          }
+        },
+        {
+          "news": "건설업계, 새로운 프로젝트 발표로 주가 상승",
+          "sentiment": "positive",
+          "probability": {
+            "increase": 0.8,
+            "decrease": 0.1,
+            "no_change": 0.1
+          }
+        },
+        {
+          "news": "건설, 부동산 시장 침체로 불확실성 증대",
+          "sentiment": "negative",
+          "probability": {
+            "increase": 0.1,
+            "decrease": 0.7,
+            "no_change": 0.2
+          }
+        },
+        {
+          "news": "건설, 지속 가능한 건축물 프로젝트로 관심 집중",
+          "sentiment": "positive",
+          "probability": {
+            "increase": 0.7,
+            "decrease": 0.2,
+            "no_change": 0.1
+          }
+        }
+      ]
+    },
+    "삼성": {
+        "morning_news": [
+            {
+
+            }
+        ]
+    },
+    "테크": {
+        "morning_news": [
+            {
+                
+            }
+        ]
+    }
+  }
+  
+  
