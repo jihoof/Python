@@ -17,10 +17,10 @@ class ShaderProgram:
         pass
 
     def get_program(self, shader_name):
-        with open(f'VoxelEngine/shaders/{shader_name}.vert', encoding='utf-8') as file:
+        with open(f'Python/VoxelEngine/shaders/{shader_name}.vert', encoding='utf-8') as file:
             vertex_shader = file.read()
 
-        with open(f'VoxelEngine/shaders/{shader_name}.frag', encoding='utf-8') as file:
+        with open(f'Python/VoxelEngine/shaders/{shader_name}.frag', encoding='utf-8') as file:
             fragment_shader = file.read()
 
         program = self.ctx.program(vertex_shader=vertex_shader, fragment_shader=fragment_shader)
