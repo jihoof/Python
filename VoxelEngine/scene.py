@@ -1,4 +1,4 @@
-from settings import * 
+from settings import *
 from meshes.quad_mesh import QuadMesh
 
 
@@ -12,3 +12,46 @@ class Scene:
 
     def render(self):
         self.quad.render()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
