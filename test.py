@@ -3,5 +3,3 @@
 #     print(tmp, end= ' ')
 #     tmp -= 1
 # print("happy new year")
-l = ["a", "b"]
-print(l, end=" ")
