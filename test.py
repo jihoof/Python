@@ -23,14 +23,22 @@ elif stair_number % 2 == 0:
         for _ in range(i):
             all_list[i].append('■')
 
-if player_move <= (stair_number-1) // 2:
-    all_list[player_move][player_move] =  "○"
-elif player_move > (stair_number-1) // 2:
-    all_list[stair_number-player_move][player_move] = "○"
-if comp_move >(stair_number-1) // 2:
-    all_list[stair_number-comp_move][-comp_move-1] =  "●"
-elif comp_move <= (stair_number-1) // 2:
-    all_list[comp_move][-comp_move-1] = "●"
+if comp_move + player_move != stair_number:
+    if player_move <= (stair_number-1) // 2:
+        all_list[player_move][player_move] =  "○"
+    elif player_move > (stair_number-1) // 2:
+        all_list[stair_number-player_move][player_move] = "○"
+    if comp_move >(stair_number-1) // 2:
+        all_list[stair_number-comp_move][-comp_move-1] =  "●"
+    elif comp_move <= (stair_number-1) // 2:
+        all_list[comp_move][-comp_move-1] = "●"
+
+else:
+    if player_move <= (stair_number-1) // 2:
+        all_list[player_move][player_move] =  "◴"
+    elif player_move > (stair_number-1) // 2:
+        all_list[stair_number-player_move][player_move] = "◴"
+
 
 
 for line in all_list:
