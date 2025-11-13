@@ -1,19 +1,12 @@
+from Posmon import *
 import os
 import sys
-import math
 import random
-import posmon
-import phs
-import sts
 import time
-
-path = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-sys.path.append(path)
-
 import module
 
 posmon_list = []
-comp_list = random.sample([posmon.Phoenix(), posmon.Normie(), posmon.Rocky(), posmon.Swania()], 3)
+comp_list = random.sample([Phoenix(), Normie(), Rocky(), Swania()], 3)
 
 def main():
     run = True
@@ -42,7 +35,7 @@ def main():
                 print("1. Rocky")
                 print("2. Phoenix")
                 print("3. Swania")
-
+                
                 name_type = ["Normie", "Rocky", "Phoenix", "Swania"]
                 while True:
                     num = module.input_int(-1, 3, '포스몬을 선택하세요: ', '잘못된 입력입니다.')
@@ -64,19 +57,19 @@ def main():
                                 continue
 
                         elif num == 0:
-                            player_list.append(posmon.Normie())
+                            player_list.append(Normie())
                             print('선택되었습니다.')
 
                         elif num == 1:
-                            player_list.append(posmon.Rocky())
+                            player_list.append(Rocky())
                             print('선택되었습니다.')
 
                         elif num == 2:
-                            player_list.append(posmon.Phoenix())
+                            player_list.append(Phoenix())
                             print('선택되었습니다.')
                             
                         elif num == 3:
-                            player_list.append(posmon.Swania())
+                            player_list.append(Swania())
                             print('선택되었습니다.')
 
                         if len(player_list) >= 3:
