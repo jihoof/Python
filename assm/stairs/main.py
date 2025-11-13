@@ -122,6 +122,14 @@ def comp_choose():
     comp_choose = random.choice(['가위','바위','보'])
     return comp_choose
 
+def player_choic():
+    while True:
+        player_choice = input('가위, 바위, 보 중 하나 선택: ')
+        if player_choice in ['가위', '바위', '보']:
+            break
+    return player_choice
+
+
 def main():
     player_move = 0
     comp_move = 0
@@ -150,9 +158,9 @@ def main():
     while True:
 
         print('[공격권 결정 가위바위보]')
-        player_choice = input('가위, 바위, 보 중 하나 선택: ')
-        comp_choice = comp_choose()
+        player_choice = player_choic()
 
+        comp_choice = comp_choose()
         print('[컴퓨터 선택]')
         if comp_choice == '가위':
             print_scissors()
@@ -199,7 +207,7 @@ def main():
                 print('컴퓨터 공격, 플레이어 수비입니다.')
             else:
                 print('플레이어 공격, 컴퓨터 수비입니다.')
-            player_choice = input('가위, 바위, 보 중 하나 선택: ')
+            player_choice = player_choic()
             comp_choice = comp_choose()
 
             print('[컴퓨터 선택]')
@@ -223,10 +231,19 @@ def main():
                 if who_win == 'comp':
                     print(f'컴퓨터 승, {move_win}칸 이동합니다.')
                     print()
+                    comp_move += move_win
+                    enter()
+                    print_stairs(stair_num, comp_move, player_move)
+                    enter()
+                    break
                 else:
                     print(f'플레이어 승, {move_win}칸 이동합니다.')
-                    print()                
-                enter()
+                    print()
+                    player_move += move_win 
+                    enter()              
+                    print_stairs(stair_num, comp_move, player_move)
+                    enter()
+                    break
 
             else:
                 if rules[comp_choice] == player_choice:
@@ -239,6 +256,25 @@ def main():
                 enter()
                 move_win += 1
                 continue
+        
+        if comp_move == stair_num:
+            print_stairs(stair_num, comp_move, player_move)
+            print()
+            print("""█████████████
+                     컴퓨터 최종 승리!!
+                     █████████████               
+""")
+            break
+        elif player_move == stair_num:
+            print_stairs(stair_num, comp_move, player_move)
+            print()
+            print("""█████████████
+                     플레이어 최종 승리!!
+                     █████████████               
+""")
+            break
+
 
 main()
+
 
