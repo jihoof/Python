@@ -1,6 +1,8 @@
 import sys
 import os
 import time
+import phs
+import sts
 
 path = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 sys.path.append(path)
@@ -36,19 +38,19 @@ class Posmon:
 
 class Phoenix(Posmon):
     def __init__(self):
-        super().__init__(86, 86, 20, 23, ['fire bress', 'Growl', ' SwordDance'], 'Phoenix', 'Fire') 
+        super().__init__(86, 86, 20, 23, [phs.FireBress(), sts.Growl(), sts.SwordDance()], 'Phoenix', 'Fire') 
 
 class Normie(Posmon):
     def __init__(self):
-        super().__init__(80, 80, 20, 20, ['Tackle', 'swift', ' tailWhip'], 'Normie', 'Normal')
+        super().__init__(80, 80, 20, 20, [phs.Tackle(), phs.Swift(), sts.TailWhip()], 'Normie', 'Normal')
 
 class Rocky(Posmon):
     def __init__(self):
-        super().__init__(80, 85, 15, 25, ['Tackle', 'Growl'], 'Rocky', 'Water')
+        super().__init__(85, 85, 15, 25, [phs.Tackle(), sts.Growl(), sts.TailWhip()], 'Rocky', 'Water')
 
 class Swania(Posmon):
     def __init__(self):
-        super().__init__(80, 80, 30, 10, ['Scissors', 'SwordDance'], 'Swania', 'Grass')
+        super().__init__(80, 80, 30, 10, [phs.ScissorsCross(), sts.SwordDance(), phs.Tackle], 'Swania', 'Grass')
 
 
 # nomarl 받는거 주는 피해 1배 
@@ -74,7 +76,7 @@ def get_attack_ratio(attacker_type, defender_typer):
     return attack_ratio
 
 
-class Move:
+class Move():
     def __init__(self, name, speed):
         self.name = name
         self.speed = speed

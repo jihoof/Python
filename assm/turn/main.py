@@ -2,9 +2,10 @@ import os
 import sys
 import math
 import random
-from posmon import *
-from phs import *
-from sts import *
+import posmon
+import phs
+import sts
+import time
 
 path = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 sys.path.append(path)
@@ -12,12 +13,12 @@ sys.path.append(path)
 import module
 
 posmon_list = []
-comp_list = random.sample([Phoenix(), Normie(), Rocky(), Swania()], 3)
-player_list = []
+comp_list = random.sample([posmon.Phoenix(), posmon.Normie(), posmon.Rocky(), posmon.Swania()], 3)
 
 def main():
     run = True
     num_posmon = 0
+    player_list = []
 
     while run:
 
@@ -30,6 +31,7 @@ def main():
         module.enter()
         
         if chose == 0:
+            player_list = []
             break_condition = False
             while True:
                 if break_condition == True:
@@ -62,28 +64,22 @@ def main():
                                 continue
 
                         elif num == 0:
-                            player_list.append(Normie())
+                            player_list.append(posmon.Normie())
                             print('선택되었습니다.')
 
                         elif num == 1:
-                            player_list.append(Rocky())
+                            player_list.append(posmon.Rocky())
                             print('선택되었습니다.')
 
                         elif num == 2:
-                            player_list.append(Phoenix())
+                            player_list.append(posmon.Phoenix())
                             print('선택되었습니다.')
                             
                         elif num == 3:
-                            player_list.append(Swania())
+                            player_list.append(posmon.Swania())
                             print('선택되었습니다.')
 
                         if len(player_list) >= 3:
-                            print('포스몬 선택이 완료되었습니다.')
-                            time.sleep(0.3)
-                            print('포스몬들에게는 귀속저주가 붙어있습니다.')
-                            time.sleep(0.3)
-                            print('한번 입양한 포스몬을 유기 할 수 없습니다.')
-                            time.sleep(0.3)
                             print(f'당신의 포스몬 목록: {' '.join([posmon.name for posmon in player_list])}')
                             break_condition = True
                             module.enter()
@@ -92,22 +88,30 @@ def main():
         elif chose == 1:
             comp_posmon = 0
             player_posmon = 0
-            if len(posmon_list) <= 0:
+            if len(player_list) <= 0:
                 print('포스몬을 선택해주세요.')
                 module.enter()
             else:
-                print(f'당신의 포스몬 목록: {' '.join(posmon_list)}')
+                print(f'당신의 포스몬 목록: {' '.join([posmon.name for posmon in player_list])}')
                 print(f'컴퓨터의 포스몬 목록: {' '.join([posmon.name for posmon in comp_list])}')
                 print()
                 print('배틀이 시작됩니다.')
                 while True:
-                    comp_str = ''.join(["X" if posmon.health <= 0 else "O" for posmon in posmon_list])
-                    comp_left = None
-                    print('################################')
-                    print(f'컴퓨터 포스몬: [{comp_str}]  / 3')
-                    print(f'{comp_list[comp_posmon].name}                 {comp_list[comp_posmon].name} {comp_list[comp_posmon].health} / {comp_list[comp_posmon].max_health}|')
+                    comp_str = ''.join(["X" if posmon.health <= 0 else "O" for posmon in comp_list])
+                    player_str = ''.join(["X" if posmon.health <= 0 else "O" for posmon in player_list])
+                    print('#'*40)
+                    print(f'컴퓨터 포스몬: [{comp_str}] {len([x for x in comp_str if x == "O"])} / 3')
+                    print(f'{comp_list[comp_posmon].name}                 | {comp_list[comp_posmon].type} {comp_list[comp_posmon].health} / {comp_list[comp_posmon].max_health}|')
                     print('                        VS')
-                    #선생님 마저 구현해주세요.
+                    print(f"{player_list[player_posmon].name}                  | {player_list[player_posmon].type} {player_list[player_posmon].health} / {player_list[player_posmon].max_health}|")
+                    print(f'당신의 포스몬 [{player_str}] {len([x for x in player_str if x == 'O'])} / {len(player_list)}')
+                    print('#'*40)
+                    print(f'기술: (0) {player_list[player_posmon].moves[0].name} (1)  {player_list[player_posmon].moves[1].name} (2) {player_list[player_posmon].moves[2].name}')
+                    print('#'*40)
+                    select = module.input_all(0, 2, '입력: ', '잘못된 입력입니다.', 'e, s')
+
+                    if select == 0:
+                        player_list[player_posmon].moves[select].use()
 
         elif chose == 2:
             time.sleep(0.7)
