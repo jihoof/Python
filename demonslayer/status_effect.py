@@ -37,26 +37,6 @@ class RegenerationInhibition():
     def __init__(self):
         pass
 
-class RegenerationInhibitionI(RegenerationInhibition):
-    def __init__(self):
-        super().__init__()
-
-class RegenerationInhibitionII(RegenerationInhibition):
-    def __init__(self):
-        super().__init__()
-
-class RegenerationInhibitionIII(RegenerationInhibition):
-    def __init__(self):
-        super().__init__()
-    
-class RegenerationInhibitionIV(RegenerationInhibition):
-    def __init__(self):
-        super().__init__()
-
-class RegenerationInhibitionV(RegenerationInhibition):
-    def __init__(self):
-        super().__init__()
-
 class BlindnessResistance():
     def __init__(self):
         pass
@@ -66,5 +46,13 @@ class GuaranteedHit():
         pass
 
 class IgnoresCriticalResistance():
+    def __init__(self):
+        pass
+
+class RecoverHp():
+    def __init__(self):
+        pass
+
+class PhantomSunCrimsonStatEffect():
     def __init__(self):
         pass

@@ -11,7 +11,7 @@ class ThePerfectSun(): #완전한 태양 요리이치 전용 패스브
     def __init__(self):
         self.name = '완벽한 태양'
 
-class ThePersonWho(): #반점의 저주를 극복한자 
+class TheOneWhoOvercameTheCurseOfTheDemonSlayerMark(): #반점의 저주를 극복한자 
     def __init__(self):
         self.name = '반점의 저주를 극복한 자'
 

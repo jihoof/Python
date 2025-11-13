@@ -6,36 +6,12 @@ import passive
 import skill_normal
 import skill_ultimate
 import color
+import rich
 
 path = os.path.dirname(os.path.dirname(__file__))
 sys.path.append(path)
 
 import module
-
-def show_info(grade, level, rank, awake, max_health, martial_arts_level, breath, 
-              start_stamina, max_stamina, ultimate_meter, 
-              skill1, skill2, skill3, ultimate, passives):
-    
-    print(f"{color.Color.BRIGHT_CYAN}{'-'*40}{color.Color.RESET}")
-    print(f"{color.Color.YELLOW}등급{color.Color.RESET}: {color.Color.GREEN}{grade}{color.Color.RESET} | {color.Color.MAGENTA}Rank{color.Color.RESET}: {color.Color.CYAN}{rank}{color.Color.RESET}")
-    print(f"{color.Color.YELLOW}Level{color.Color.RESET}: {level} (Awake {awake})")
-    print(f"{color.Color.RED}체력{color.Color.RESET}: {max_health:.1f}")
-    print(f"{color.Color.BLUE}체술{color.Color.RESET}: {martial_arts_level:.1f}")
-    print(f"{color.Color.CYAN}호흡{color.Color.RESET}: {breath:.1f}")
-    print(f"{color.Color.WHITE}스태미너{color.Color.RESET}: {start_stamina}/{max_stamina}")
-    print(f"{color.Color.MAGENTA}궁극기 게이지{color.Color.RESET}: {ultimate_meter}")
-    print()
-    
-    print(f"{color.Color.GREEN}스킬 1{color.Color.RESET}: {getattr(skill1, 'name', skill1)}")
-    print(f"{color.Color.GREEN}스킬 2{color.Color.RESET}: {getattr(skill2, 'name', skill2)}")
-    print(f"{color.Color.GREEN}스킬 3{color.Color.RESET}: {getattr(skill3, 'name', skill3)}")
-    print(f"{color.Color.RED}궁극기{color.Color.RESET}: {getattr(ultimate, 'name', ultimate)}")
-
-    # 패시브 출력
-    passive_names = [getattr(p, 'name', getattr(p, '__class__', type('')).__name__) for p in (passives or [])]
-    print(f"{color.Color.BRIGHT_YELLOW}패시브{color.Color.RESET}: {color.Color.BRIGHT_WHITE}{', '.join(passive_names)}{color.Color.RESET}")
-
-    print(f"{color.Color.BRIGHT_CYAN}{'-'*40}{color.Color.RESET}")
 
 #속성 
 
@@ -52,7 +28,8 @@ grade_data = {
     "신": {"level": 180, "stat_bonus": 250, "rank": 8},
     "임": {"level": 190, "stat_bonus": 300, "rank": 9},
     "계": {"level": 200, "stat_bonus": 400, "rank": 10},
-    "주": {"level": 210, "stat_bonus": 1000, "rank": 11}
+    "주": {"level": 210, "stat_bonus": 1000, "rank": 11},
+    "태초의 검사": {"level": 220, "stat_bonus": 10000, "rank": 12}
 }
 
 
@@ -69,7 +46,7 @@ def get_total_stat_bonus(rank):
 class Character():
     def __init__(self, level, grade, awake, ultimate_meter,
                  base_breath, base_health, base_martial_arts_level, base_blood_demon_art_level,
-                 stat_per_level_health, stat_per_level_attack):
+                 stat_per_level_health, stat_per_level_attack, base_stamina, max_stamina):
         self.level = level
         self.max_level = 100 # grade 따라서로 바꿔야됨
         self.grade = grade
@@ -97,12 +74,12 @@ class Character():
             self.blood_demon_art_level = 0
 
         if self.awake == 5:
-            self.start_stamina = 30
-            self.max_stamina = 110
+            self.start_stamina = base_stamina + 10
+            self.max_stamina = max_stamina + 10
             self.ultimate_meter = ultimate_meter - 100
         else:
-            self.start_stamina = 20
-            self.max_stamina = 100
+            self.start_stamina = base_stamina
+            self.max_stamina = max_stamina
             self.ultimate_meter = ultimate_meter
 
     def show_info_breath(self):
@@ -112,7 +89,7 @@ class Character():
         print(f"{color.Color.RED}체력{color.Color.RESET}: {self.max_health:.1f}")
         print(f"{color.Color.BLUE}체술{color.Color.RESET}: {self.martial_arts_level:.1f}")
         print(f"{color.Color.CYAN}호흡{color.Color.RESET}: {self.breath:.1f}")
-        print(f"{color.Color.WHITE}스태미너{color.Color.RESET}: {self.start_stamina}/{self.max_stamina}")
+        print(f"{color.Color.WHITE}스태미나{color.Color.RESET}: {self.start_stamina}/{self.max_stamina}")
         print(f"{color.Color.MAGENTA}궁극기 게이지{color.Color.RESET}: {self.ultimate_meter}")
         print()
         
@@ -244,7 +221,7 @@ class LR(Character):
 
 class EX(Character):
     def __init__(self, level, grade, awake, ultimate_meter,
-                 base_breath, base_health, base_martial_arts_level, base_blood_demon_art_level):
+                 base_breath, base_health, base_martial_arts_level, base_blood_demon_art_level, base_stamina, max_stamina ):
         
         # Character __init__ 호출, 레벨별 스탯 증가량 10, 2로 설정
         super().__init__(
@@ -257,32 +234,38 @@ class EX(Character):
             base_martial_arts_level=base_martial_arts_level,
             base_blood_demon_art_level=base_blood_demon_art_level,
             stat_per_level_health=500,
-            stat_per_level_attack=250
+            stat_per_level_attack=250,
+            base_stamina=base_stamina,
+            max_stamina=max_stamina
+
+            
         )
 
 #실험용 첫 캐릭
-class WhatIsSoFunTysikuniYourich(EX):
-    def __init__(self, level, grade, awake, ultimate_meter, base_breath, base_health, base_martial_arts_level, base_blood_demon_art_level):
-        super().__init__(level, grade, awake, ultimate_meter, base_breath, base_health, base_martial_arts_level, base_blood_demon_art_level)
+class WhatIsSoFunTsugikuniYoriichi(EX):
+    def __init__(self, level, grade, awake, ultimate_meter, base_breath, base_health, base_martial_arts_level, base_blood_demon_art_level, base_stamina, max_stamina):
+        super().__init__(level, grade, awake, ultimate_meter, base_breath, base_health, base_martial_arts_level, base_blood_demon_art_level, base_stamina, max_stamina)
         self.skill1 = skill_normal.FlashCut()
         self.skill2 = skill_breath.PhantomSunCrimson()
         self.skill3 = skill_breath.DragonSunHaloHeadDance()#분노 상태로 1,2,3스킬 다변형
         self.ultimate = ""
-        self.passives = [passive.ThePerfectSun(), passive.ThePersonWho(), passive.DemonSlayerMarkV(), passive.TransparantWorldVI(), passive.RedSowrdVI()]
+        self.passives = [passive.ThePerfectSun(), passive.TheOneWhoOvercameTheCurseOfTheDemonSlayerMark(), passive.DemonSlayerMarkV(), passive.TransparantWorldVI(), passive.RedSowrdVI()]
 
 #테스트
 if __name__ == "__main__":
 
-    character1 = WhatIsSoFunTysikuniYourich(
+    character1 = WhatIsSoFunTsugikuniYoriichi(
 
         level = 210,
-        grade='주',
+        grade='태초의 검사',
         awake=5,
         ultimate_meter=2500,
         base_breath=14329,
         base_health=32938,
         base_martial_arts_level=12429,
-        base_blood_demon_art_level=0
+        base_blood_demon_art_level=0,
+        base_stamina = 70,
+        max_stamina = 220
     )
 
     

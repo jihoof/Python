@@ -25,7 +25,7 @@ class PhantomSunCrimson(): #환일홍
             f'자신에게 실명무시를 부여한다.' 
         )
 
-        self.self_status_effect = []
+        self.self_status_effect = [status_effect.RecoverHp(), status_effect.PhantomSunCrimsonStatEffect()]
         self.enemy_status_effect = [status_effect.RegenerationInhibitionV()]
 
 class DragonSunHaloHeadDance(): #햇무리의 용·두무
