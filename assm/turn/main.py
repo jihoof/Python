@@ -107,6 +107,7 @@ def main():
                     print(f'컴퓨터 포스몬: [{comp_str}]  / 3')
                     print(f'{comp_list[comp_posmon].name}                 {comp_list[comp_posmon].name} {comp_list[comp_posmon].health} / {comp_list[comp_posmon].max_health}|')
                     print('                        VS')
+                    #선생님 마저 구현해주세요.
 
         elif chose == 2:
             time.sleep(0.7)
