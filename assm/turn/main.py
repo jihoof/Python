@@ -102,8 +102,10 @@ def main():
                     print(f"{rplayer_posmon.name}                  | {rplayer_posmon.type} {rplayer_posmon.health} / {rplayer_posmon.max_health}|")
                     print(f'당신의 포스몬 [{player_str}] {len([x for x in player_str if x == 'O'])} / {len(player_list)}')
                     print('#'*40)
-                    print(f'기술: (0) {rplayer_posmon.moves[0].name} (1)  {rplayer_posmon.moves[1].name} (2) {rplayer_posmon.moves[2].name}')
-                    print('#'*40)
+                    print("기술: ", end = "")
+                    for i in range(len(rplayer_posmon.moves)):
+                        print(f"({i}) {rplayer_posmon.moves[i].name}", end = " ")
+                    print('\n'+'#'*40)
                     select = input('입력: ')
 
 

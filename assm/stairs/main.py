@@ -115,7 +115,7 @@ def enter(): #엔터키 입력받았을 때 clear
         print("\n계속하려면 엔터를 눌러주세요...")
         enter = input("")
         if enter == "":
-            os.system('cls')
+            os.system('cls' if os.name == 'nt' else 'clear')
             break
 
 def comp_choose():
