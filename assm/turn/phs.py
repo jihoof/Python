@@ -18,13 +18,13 @@ class Tackle(PhysicalMove):
         if is_player_move == True:
             attack_ratio = self.get_attack_ratio(our_posmon.type, ai_posmon.type)
             original_health = ai_posmon.health
-            ai_posmon.health -= max(self.power + our_posmon.attack - ai_posmon.defence) * attack_ratio
+            ai_posmon.health -= max(0, self.power + our_posmon.attack - ai_posmon.defence) * attack_ratio
             print(f'당신의 포스몬이 태클을 사용합니다.')  
             print(f'상대 포스몬의 체력이 감소합니다. ({ai_posmon.health} <- {original_health} )')
         else:
             attack_ratio = self.get_attack_ratio(ai_posmon.type, our_posmon.type)
             original_health = our_posmon.health
-            our_posmon.health -= max(self.power + ai_posmon.attack - our_posmon.defence) * attack_ratio
+            our_posmon.health -= max(0, self.power + ai_posmon.attack - our_posmon.defence) * attack_ratio
             print(f'상대의 포스몬이 태클을 사용합니다.')  
             print(f'당신의 포스몬의 체력이 감소합니다. ({our_posmon.health} <- {original_health} )')
             
@@ -37,13 +37,13 @@ class ScissorsCross(PhysicalMove):
         if is_player_move == True:
             attack_ratio = self.get_attack_ratio(our_posmon.type, ai_posmon.type)
             original_health = ai_posmon.health
-            ai_posmon.health -= max(self.power + our_posmon.attack - ai_posmon.defence) * attack_ratio
+            ai_posmon.health -= max(0, self.power + our_posmon.attack - ai_posmon.defence) * attack_ratio
             print(f'당신의 포스몬이 시저크로스를 사용합니다.')  
             print(f'상대 포스몬의 체력이 감소합니다. ({ai_posmon.health} <- {original_health} )')
         else:
             attack_ratio = self.get_attack_ratio(ai_posmon.type, our_posmon.type)
             original_health = our_posmon.health
-            our_posmon.health -= max(self.power + ai_posmon.attack - our_posmon.defence) * attack_ratio
+            our_posmon.health -= max(0, self.power + ai_posmon.attack - our_posmon.defence) * attack_ratio
             print(f'상대의 포스몬이 시저크로스를 사용합니다.')  
             print(f'당신의 포스몬의 체력이 감소합니다. ({our_posmon.health} <- {original_health} )')
     
@@ -56,13 +56,13 @@ class Swift(PhysicalMove):
         if is_player_move == True:
             attack_ratio = self.get_attack_ratio(our_posmon.type, ai_posmon.type)
             original_health = ai_posmon.health
-            ai_posmon.health -= max(self.power + our_posmon.attack - ai_posmon.defence) * attack_ratio
+            ai_posmon.health -= max(0, self.power + our_posmon.attack - ai_posmon.defence) * attack_ratio
             print(f'당신의 포스몬이 스피드스타를 사용합니다.')  
             print(f'상대 포스몬의 체력이 감소합니다. ({ai_posmon.health} <- {original_health} )')
         else:
             attack_ratio = self.get_attack_ratio(ai_posmon.type, our_posmon.type)
             original_health = our_posmon.health
-            our_posmon.health -= max(self.power + ai_posmon.attack - our_posmon.defence) * attack_ratio
+            our_posmon.health -= max(0, self.power + ai_posmon.attack - our_posmon.defence) * attack_ratio
             print(f'상대의 포스몬이 스피드스타를 사용합니다.')  
             print(f'당신의 포스몬의 체력이 감소합니다. ({our_posmon.health} <- {original_health} )')
             
@@ -75,7 +75,7 @@ class FireBress(PhysicalMove):
         if is_player_move == True:
             attack_ratio = self.get_attack_ratio(our_posmon.type, ai_posmon.type)
             original_health = ai_posmon.health
-            ai_posmon.health -= max(self.power + our_posmon.attack - ai_posmon.defence) * attack_ratio
+            ai_posmon.health -= max(0, self.power + our_posmon.attack - ai_posmon.defence) * attack_ratio
             burnt = module.chance(50)
             if burnt == True and ai_posmon.burnt == False:
                 ai_posmon.burnt = True
@@ -88,7 +88,7 @@ class FireBress(PhysicalMove):
         else:
             attack_ratio = self.get_attack_ratio(our_posmon.type, ai_posmon.type)
             original_health = ai_posmon.health
-            our_posmon.health -= max(self.power + ai_posmon.attack - our_posmon.defence) * attack_ratio
+            our_posmon.health -= max(0, self.power + ai_posmon.attack - our_posmon.defence) * attack_ratio
             burnt = module.chance(50)
             if burnt == True and ai_posmon.burnt == False:
                 ai_posmon.burnt = True

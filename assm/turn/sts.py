@@ -60,7 +60,7 @@ class SwordDance(StatusMove):
             ai_posmon.attack += 10
             print(f'{ai_posmon.name}이 {self.name}을/를 사용합니다.')
             time.sleep(0.5)
-            print(f'상대의 포스몬의 공격력이 10 증가합니다. {cur_attack} -> {ai_posmon} ')
+            print(f'상대의 포스몬의 공격력이 10 증가합니다. {cur_attack} -> {ai_posmon.attack} ')
             time.sleep(0.3)
             module.enter()   
 
@@ -96,6 +96,7 @@ class TailWhip(StatusMove):
                     module.enter()
         
         else:
+            angry = module.chance(50)
             if angry == True:
                 cur_attack = our_posmon.attack
                 our_posmon.attack += 5
