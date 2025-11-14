@@ -38,7 +38,7 @@ class Growl(StatusMove):
                 our_posmon.attack -= 5
                 print(f'{ai_posmon.name}이 {self.name}을/를 사용합니다.')
                 time.sleep(0.5)
-                print(f'당신의 포스몬의 공격력이 5 감소합니다. {cur_attack} -> {our_posmon} ')
+                print(f'당신의 포스몬의 공격력이 5 감소합니다. {cur_attack} -> {our_posmon.attack} ')
                 time.sleep(0.3)
                 module.enter() 
 

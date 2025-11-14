@@ -127,10 +127,16 @@ def main():
                     if 'e' in select:
                         print('#' * 40)
                         for i in range(len(player_list)):
-                            print(f'{(i)} {player_list[i]}    |{player_list[i].type} {player_list[i].health} / {player_list[i].max_health}')
+                            print(f'{(i)} {player_list[i].name}    |{player_list[i].type} {player_list[i].health} / {player_list[i].max_health}')
                         print('#' * 40)
                         module.enter()
-                    
+
+                    if 's' in select:
+                        tmp = select.split()
+                        change_num = int(tmp[1])
+                        player_posmon = change_num
+                        rplayer_posmon = player_list[player_posmon]
+                        module.enter()
                     
 
         elif chose == 2:
