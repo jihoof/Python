@@ -4,6 +4,7 @@ import sys
 import random
 import time
 import module
+import rich
 
 posmon_list = []
 comp_list = random.sample([Phoenix(), Normie(), Rocky(), Swania()], 3)
@@ -117,6 +118,27 @@ def main():
                             module.enter()
                             rcomp_posmon_skill.use(rplayer_posmon, rcomp_posmon, False)
                             module.enter()
+                        if rplayer_posmon_skill.speed < rcomp_posmon_skill.speed:
+                            rcomp_posmon_skill.use(rplayer_posmon, rcomp_posmon, False)
+                            module.enter()
+                            rplayer_posmon_skill.use(rplayer_posmon, rcomp_posmon, True)
+                            module.enter()
+                    
+                    if 'e' in select:
+                        print('#'*40)
+                        if len(player_list) == 1:
+                            print(f'(0) {player_list[0]}    |{player_list[0].type} {player_list[0].health} / {player_list[0].max_health}')
+                        elif len(player_list) == 2:
+                            print(f'(0) {player_list[0]}    |{player_list[0].type} {player_list[0].health} / {player_list[0].max_health}')
+                            print(f'(1) {player_list[1]}    |{player_list[1].type} {player_list[1].health} / {player_list[1].max_health}')
+                        else:
+                            print(f'(0) {player_list[0]}    |{player_list[0].type} {player_list[0].health} / {player_list[0].max_health}')
+                            print(f'(1) {player_list[1]}    |{player_list[1].type} {player_list[1].health} / {player_list[1].max_health}')
+                            print(f'(2) {player_list[2]}    |{player_list[2].type} {player_list[2].health} / {player_list[2].max_health}')
+                        print('#' * 40)
+                        module.enter()
+                    
+                    
 
         elif chose == 2:
             time.sleep(0.7)
