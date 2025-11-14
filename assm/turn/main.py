@@ -125,16 +125,9 @@ def main():
                             module.enter()
                     
                     if 'e' in select:
-                        print('#'*40)
-                        if len(player_list) == 1:
-                            print(f'(0) {player_list[0]}    |{player_list[0].type} {player_list[0].health} / {player_list[0].max_health}')
-                        elif len(player_list) == 2:
-                            print(f'(0) {player_list[0]}    |{player_list[0].type} {player_list[0].health} / {player_list[0].max_health}')
-                            print(f'(1) {player_list[1]}    |{player_list[1].type} {player_list[1].health} / {player_list[1].max_health}')
-                        else:
-                            print(f'(0) {player_list[0]}    |{player_list[0].type} {player_list[0].health} / {player_list[0].max_health}')
-                            print(f'(1) {player_list[1]}    |{player_list[1].type} {player_list[1].health} / {player_list[1].max_health}')
-                            print(f'(2) {player_list[2]}    |{player_list[2].type} {player_list[2].health} / {player_list[2].max_health}')
+                        print('#' * 40)
+                        for i in range(len(player_list)):
+                            print(f'{(i)} {player_list[i]}    |{player_list[i].type} {player_list[i].health} / {player_list[i].max_health}')
                         print('#' * 40)
                         module.enter()
                     
