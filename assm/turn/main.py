@@ -41,21 +41,24 @@ def main():
                 while True:
                     num = module.input_int(-1, 3, '포스몬을 선택하세요: ', '잘못된 입력입니다.')
 
-                    # 이미 선택한 포스몬일 때
-                    if name_type[num] in [posmon.name for posmon in player_list]:
-                        print("이미 선택하셨습니다. 다시하세요")
-                        continue
+                    if num == -1:
+                        if len(player_list) > 0:
+                            print('포스몬 선택이 완료되었습니다.')
+                            print(f"당신의 포스몬 목록: {' '.join([posmon.name for posmon in player_list])}") 
+                            break_condition = True
+                            module.enter()
+                            break
+                        else:
+                            print('포스몬을 최소 한마리 선택하세요.')
+                            continue
+
+
+
                     else:
-                        if num == -1:
-                            if len(player_list) > 0:
-                                print('포스몬 선택이 완료되었습니다.')
-                                print(f"당신의 포스몬 목록: {' '.join([posmon.name for posmon in player_list])}") 
-                                break_condition = True
-                                module.enter()
-                                break
-                            else:
-                                print('포스몬을 최소 한마리 선택하세요.')
-                                continue
+                        # 이미 선택한 포스몬일 때
+                        if name_type[num] in [posmon.name for posmon in player_list]:
+                            print("이미 선택하셨습니다. 다시하세요")
+                            continue
 
                         elif num == 0:
                             player_list.append(Normie())
@@ -138,7 +141,9 @@ def main():
                         change_num = int(tmp[1])
                         player_posmon = change_num
                         rplayer_posmon = player_list[player_posmon]
+                        rplayer_posmon.reset_status()
                         module.enter()
+                        #상대 포스몬 공격 구현
                     
 
         elif chose == 2:

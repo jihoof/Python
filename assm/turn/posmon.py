@@ -12,6 +12,8 @@ class Posmon:
         self.name = name
         self.type = type
         self.burnt = False
+        self.default_attack = attack
+        self.default_defence = defence
     
     def get_name(self) -> str:
         return self.name
@@ -26,7 +28,9 @@ class Posmon:
         if reset_health == 'True':
             self.health = self.max_health
         else:
-            pass
+            self.attack = self.default_attack
+            self.defence = self.default_defence
+
 
 class Phoenix(Posmon):
     def __init__(self):
