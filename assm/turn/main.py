@@ -83,67 +83,68 @@ def main():
                             break 
         
         elif chose == 1:
+            if len(player_list) <= 0:
+                print('포스몬을 선택해주세요.')
+                module.enter()
+                continue
             comp_posmon = 0
             player_posmon = 0
             rcomp_posmon = comp_list[comp_posmon]
             rplayer_posmon = player_list[player_posmon]
-            if len(player_list) <= 0:
-                print('포스몬을 선택해주세요.')
-                module.enter()
-            else:
-                print(f'당신의 포스몬 목록: {' '.join([posmon.name for posmon in player_list])}')
-                print(f'컴퓨터의 포스몬 목록: {' '.join([posmon.name for posmon in comp_list])}')
-                print()
-                print('배틀이 시작됩니다.')
-                while True:
-                    comp_str = ''.join(["X" if posmon.health <= 0 else "O" for posmon in comp_list])
-                    player_str = ''.join(["X" if posmon.health <= 0 else "O" for posmon in player_list])
-                    print('#'*40)
-                    print(f'컴퓨터 포스몬: [{comp_str}] {len([x for x in comp_str if x == "O"])} / 3')
-                    print(f'{rcomp_posmon.name}                 | {rcomp_posmon.type} {rcomp_posmon.health} / {rcomp_posmon.max_health}|')
-                    print('                        VS')
-                    print(f"{rplayer_posmon.name}                  | {rplayer_posmon.type} {rplayer_posmon.health} / {rplayer_posmon.max_health}|")
-                    print(f'당신의 포스몬 [{player_str}] {len([x for x in player_str if x == 'O'])} / {len(player_list)}')
-                    print('#'*40)
-                    print("기술: ", end = "")
-                    for i in range(len(rplayer_posmon.moves)):
-                        print(f"({i}) {rplayer_posmon.moves[i].name}", end = " ")
-                    print('\n'+'#'*40)
-                    select = input('입력: ')
+            
+            print(f'당신의 포스몬 목록: {' '.join([posmon.name for posmon in player_list])}')
+            print(f'컴퓨터의 포스몬 목록: {' '.join([posmon.name for posmon in comp_list])}')
+            print()
+            print('배틀이 시작됩니다.')
+            while True:
+                comp_str = ''.join(["X" if posmon.health <= 0 else "O" for posmon in comp_list])
+                player_str = ''.join(["X" if posmon.health <= 0 else "O" for posmon in player_list])
+                print('#'*40)
+                print(f'컴퓨터 포스몬: [{comp_str}] {len([x for x in comp_str if x == "O"])} / 3')
+                print(f'{rcomp_posmon.name}                 | {rcomp_posmon.type} {rcomp_posmon.health} / {rcomp_posmon.max_health}|')
+                print('                        VS')
+                print(f"{rplayer_posmon.name}                  | {rplayer_posmon.type} {rplayer_posmon.health} / {rplayer_posmon.max_health}|")
+                print(f'당신의 포스몬 [{player_str}] {len([x for x in player_str if x == 'O'])} / {len(player_list)}')
+                print('#'*40)
+                print("기술: ", end = "")
+                for i in range(len(rplayer_posmon.moves)):
+                    print(f"({i}) {rplayer_posmon.moves[i].name}", end = " ")
+                print('\n'+'#'*40)
+                select = input('입력: ')
 
 
-                    if 'o' in select:
-                        tmp = select.split()
-                        attack_num = int(tmp[1])
-                        com_attack_num = random.randint(0,2)
-                        rplayer_posmon_skill = rplayer_posmon.moves[attack_num]
-                        rcomp_posmon_skill = rcomp_posmon.moves[com_attack_num]
-                        if rplayer_posmon_skill.speed >= rcomp_posmon_skill.speed:
-                            rplayer_posmon_skill.use(rplayer_posmon, rcomp_posmon, True)
-                            module.enter()
-                            rcomp_posmon_skill.use(rplayer_posmon, rcomp_posmon, False)
-                            module.enter()
-                        if rplayer_posmon_skill.speed < rcomp_posmon_skill.speed:
-                            rcomp_posmon_skill.use(rplayer_posmon, rcomp_posmon, False)
-                            module.enter()
-                            rplayer_posmon_skill.use(rplayer_posmon, rcomp_posmon, True)
-                            module.enter()
+                if 'o' in select:
+                    tmp = select.split()
+                    attack_num = int(tmp[1])
+                    com_attack_num = random.randint(0,2)
+                    rplayer_posmon_skill = rplayer_posmon.moves[attack_num]
+                    rcomp_posmon_skill = rcomp_posmon.moves[com_attack_num]
+                    if rplayer_posmon_skill.speed >= rcomp_posmon_skill.speed:
+                        rplayer_posmon_skill.use(rplayer_posmon, rcomp_posmon, True)
+                        module.enter()
+                        rcomp_posmon_skill.use(rplayer_posmon, rcomp_posmon, False)
+                        module.enter()
+                    if rplayer_posmon_skill.speed < rcomp_posmon_skill.speed:
+                        rcomp_posmon_skill.use(rplayer_posmon, rcomp_posmon, False)
+                        module.enter()
+                        rplayer_posmon_skill.use(rplayer_posmon, rcomp_posmon, True)
+                        module.enter()
                     
-                    if 'e' in select:
-                        print('#' * 40)
-                        for i in range(len(player_list)):
-                            print(f'{(i)} {player_list[i].name}    |{player_list[i].type} {player_list[i].health} / {player_list[i].max_health}')
-                        print('#' * 40)
-                        module.enter()
+                if 'e' in select:
+                    print('#' * 40)
+                    for i in range(len(player_list)):
+                        print(f'{(i)} {player_list[i].name}    |{player_list[i].type} {player_list[i].health} / {player_list[i].max_health}')
+                    print('#' * 40)
+                    module.enter()
 
-                    if 's' in select:
-                        tmp = select.split()
-                        change_num = int(tmp[1])
-                        player_posmon = change_num
-                        rplayer_posmon = player_list[player_posmon]
-                        rplayer_posmon.reset_status()
-                        module.enter()
-                        #상대 포스몬 공격 구현
+                if 's' in select:
+                    tmp = select.split()
+                    change_num = int(tmp[1])
+                    player_posmon = change_num
+                    rplayer_posmon = player_list[player_posmon]
+                    rplayer_posmon.reset_status()
+                    module.enter()
+                    #상대 포스몬 공격 구현
                     
 
         elif chose == 2:
