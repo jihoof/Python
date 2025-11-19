@@ -1,5 +1,7 @@
 import random
 import os
+import time
+import sys
 
 def enter(): #엔터키 입력받았을 때 clear
     while True:
@@ -115,3 +117,19 @@ def print_paper():
     print("│    ▩▩▩▩▩          │")
     print("│                   │")
     print("└───────────────────┘")
+
+def shut_down(self):
+    time.sleep(1)
+    clear()
+    print('게임을 종료합니다.')
+    time.sleep(0.5)
+    print()
+    print()
+    time.sleep(0.5)
+    print("게임을 종료 중...", end='', flush=True)  # flush 추가
+    for _ in range(random.randint(5, 10)):
+        print(".", end='', flush=True)
+        time.sleep(1)
+    print()
+    os.system('cls' if os.name == 'nt' else 'clear')
+    sys.exit()

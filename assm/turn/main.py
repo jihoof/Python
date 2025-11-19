@@ -9,6 +9,8 @@ import rich
 posmon_list = []
 comp_list = random.sample([Phoenix(), Normie(), Rocky(), Swania()], 3)
 
+
+
 def main():
     run = True
     num_posmon = 0
@@ -89,14 +91,39 @@ def main():
                 continue
             comp_posmon = 0
             player_posmon = 0
-            rcomp_posmon = comp_list[comp_posmon]
-            rplayer_posmon = player_list[player_posmon]
             
             print(f'당신의 포스몬 목록: {' '.join([posmon.name for posmon in player_list])}')
             print(f'컴퓨터의 포스몬 목록: {' '.join([posmon.name for posmon in comp_list])}')
             print()
             print('배틀이 시작됩니다.')
             while True:
+
+                rcomp_posmon = comp_list[comp_posmon]
+                rplayer_posmon = player_list[player_posmon]
+
+                if rcomp_posmon.health <= 0:
+                    if comp_posmon < 2:
+                        print(f'컴퓨터 {rcomp_posmon.name}: 죽음')
+                        comp_posmon += 1
+                        rcomp_posmon = comp_list[comp_posmon]
+                        print(f'컴퓨터 {rcomp_posmon.name}으로 교체됨')
+                    else:
+                        print('플레이어 승')
+                        module.shut_down()
+                
+                if rplayer_posmon.health <= 0:
+                    tmp = 0
+                    for i in range(len(player_list)):
+                        if player_list[i].health > 0:
+                            tmp += 1
+                            player_posmon = i
+                            rplayer_posmon = player_list[player_posmon]
+                            print(f'플레이어 {rplayer_posmon.name}으로 교체됨')
+                            break
+                    if tmp == 0:
+                        print('님 패배함 ㅋ')
+                        module.shut_down()
+
                 comp_str = ''.join(["X" if posmon.health <= 0 else "O" for posmon in comp_list])
                 player_str = ''.join(["X" if posmon.health <= 0 else "O" for posmon in player_list])
                 print('#'*40)
@@ -111,6 +138,7 @@ def main():
                     print(f"({i}) {rplayer_posmon.moves[i].name}", end = " ")
                 print('\n'+'#'*40)
                 select = input('입력: ')
+                                                
 
 
                 if 'o' in select:
@@ -140,28 +168,25 @@ def main():
                 if 's' in select:
                     tmp = select.split()
                     change_num = int(tmp[1])
+                    if change_num > len(player_list)-1 or change_num == player_posmon:
+                        print('포스몬이 비정상적으로 교체되었습니다.')
+                        continue
                     player_posmon = change_num
                     rplayer_posmon = player_list[player_posmon]
                     rplayer_posmon.reset_status()
+                    print('포스몬이 정상적으로 교체되었습니다.')
                     module.enter()
                     #상대 포스몬 공격 구현
+                    com_attack_num = random.randint(0,2)
+                    rcomp_posmon_skill = rcomp_posmon.moves[com_attack_num]
+                    rcomp_posmon_skill.use(rplayer_posmon, rcomp_posmon, False)
+                    module.enter()
+                
+
                     
 
         elif chose == 2:
-            time.sleep(0.7)
-            module.clear()
-            print('게임을 종료합니다.')
-            time.sleep(0.5)
-            print()
-            print()
-            time.sleep(0.5)
-            print("게임을 종료 중...", end='', flush=True)  # flush 추가
-            for _ in range(random.randint(5, 10)):
-                print(".", end='', flush=True)
-                time.sleep(1)
-            print()
-            os.system('cls' if os.name == 'nt' else 'clear')
-            sys.exit()
+            module.shut_down()
 
     
 if __name__ == '__main__':

@@ -46,7 +46,7 @@ class Rocky(Posmon):
 
 class Swania(Posmon):
     def __init__(self):
-        super().__init__(80, 80, 30, 10, [ScissorsCross(), SwordDance(), Tackle], 'Swania', 'Grass')
+        super().__init__(80, 80, 30, 10, [ScissorsCross(), SwordDance(), Tackle()], 'Swania', 'Grass')
 
 
 
