@@ -9,11 +9,8 @@ import rich
 posmon_list = []
 comp_list = random.sample([Phoenix(), Normie(), Rocky(), Swania()], 3)
 
-
-
 def main():
     run = True
-    num_posmon = 0
     player_list = []
 
     while run:
@@ -54,8 +51,6 @@ def main():
                             print('포스몬을 최소 한마리 선택하세요.')
                             continue
 
-
-
                     else:
                         # 이미 선택한 포스몬일 때
                         if name_type[num] in [posmon.name for posmon in player_list]:
@@ -89,15 +84,15 @@ def main():
                 print('포스몬을 선택해주세요.')
                 module.enter()
                 continue
-            comp_posmon = 0
+            
+            # 포스몬 인덱스
+            comp_posmon = 0    
             player_posmon = 0
             
             print(f'당신의 포스몬 목록: {' '.join([posmon.name for posmon in player_list])}')
             print(f'컴퓨터의 포스몬 목록: {' '.join([posmon.name for posmon in comp_list])}')
-            print()
-            print('배틀이 시작됩니다.')
+            print('\n배틀이 시작됩니다.')
             while True:
-
                 rcomp_posmon = comp_list[comp_posmon]
                 rplayer_posmon = player_list[player_posmon]
 
@@ -123,9 +118,12 @@ def main():
                     if tmp == 0:
                         print('님 패배함 ㅋ')
                         module.shut_down()
-
+                
+                # OXO 출력
                 comp_str = ''.join(["X" if posmon.health <= 0 else "O" for posmon in comp_list])
                 player_str = ''.join(["X" if posmon.health <= 0 else "O" for posmon in player_list])
+                
+                
                 print('#'*40)
                 print(f'컴퓨터 포스몬: [{comp_str}] {len([x for x in comp_str if x == "O"])} / 3')
                 print(f'{rcomp_posmon.name}                 | {rcomp_posmon.type} {rcomp_posmon.health} / {rcomp_posmon.max_health}|')
@@ -139,8 +137,6 @@ def main():
                 print('\n'+'#'*40)
                 select = input('입력: ')
                                                 
-
-
                 if 'o' in select:
                     tmp = select.split()
                     attack_num = int(tmp[1])
@@ -158,14 +154,14 @@ def main():
                         rplayer_posmon_skill.use(rplayer_posmon, rcomp_posmon, True)
                         module.enter()
                     
-                if 'e' in select:
+                elif 'e' in select:
                     print('#' * 40)
                     for i in range(len(player_list)):
                         print(f'{(i)} {player_list[i].name}    |{player_list[i].type} {player_list[i].health} / {player_list[i].max_health}')
                     print('#' * 40)
                     module.enter()
 
-                if 's' in select:
+                elif 's' in select:
                     tmp = select.split()
                     change_num = int(tmp[1])
                     if change_num > len(player_list)-1 or change_num == player_posmon:
@@ -182,7 +178,10 @@ def main():
                     rcomp_posmon_skill.use(rplayer_posmon, rcomp_posmon, False)
                     module.enter()
                 
-
+                else:
+                    print('잘못된 입력입니다. 다시 입력하세요.')
+                    module.enter()
+                    continue
                     
 
         elif chose == 2:

@@ -118,7 +118,7 @@ def print_paper():
     print("│                   │")
     print("└───────────────────┘")
 
-def shut_down(self):
+def shut_down():
     time.sleep(1)
     clear()
     print('게임을 종료합니다.')

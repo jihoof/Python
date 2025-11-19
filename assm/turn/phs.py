@@ -86,14 +86,14 @@ class FireBress(PhysicalMove):
             print(f'상대 포스몬의 체력이 감소합니다. ({ai_posmon.health} <- {original_health} )')
 
         else:
-            attack_ratio = self.get_attack_ratio(our_posmon.type, ai_posmon.type)
-            original_health = ai_posmon.health
+            attack_ratio = self.get_attack_ratio(ai_posmon.type, our_posmon.type)
+            original_health = our_posmon.health
             our_posmon.health -= max(0, self.power + ai_posmon.attack - our_posmon.defence) * attack_ratio
             burnt = module.chance(50)
-            if burnt == True and ai_posmon.burnt == False:
-                ai_posmon.burnt = True
+            if burnt == True and our_posmon.burnt == False:
+                our_posmon.burnt = True
             else:
                 pass
 
-            print(f'당신의 포스몬이 화염의 호흡 오의 • 제9의 형 「연옥」을 사용합니다.')  
-            print(f'상대 포스몬의 체력이 감소합니다. ({our_posmon.health} <- {original_health} )')
+            print(f'상대 포스몬이 화염의 호흡 오의 • 제9의 형 「연옥」을 사용합니다.')  
+            print(f'당신의 포스몬의 체력이 감소합니다. ({our_posmon.health} <- {original_health} )')
