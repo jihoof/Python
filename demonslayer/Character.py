@@ -3,12 +3,12 @@ from load import game_dict
 import json
 
 class Character:
-    def __init__(self, name):
+    def __init__(self, name, stat_list):
         self.name = name
         self.stat = {}
-        self.skill = [DragonSunHaloHeadDance()]
+        
         self.effect_on_object = []
-        self.init_stat([100, 50, 30, 20, 10, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ])
+        self.init_stat(stat_list)
     
     def init_stat(self, stat_list):
         for i, key in enumerate(game_dict.keys()):                
@@ -27,8 +27,15 @@ class Character:
             if passive[1] == 0:
                 self.stat[passive[0]] = self.original_stat(self.stat[passive[0]], passive[2])
                 self.effect_on_object.remove(passive)
-                
+
+class Tanjiro(Character):
+    def __init__(self):
+        stat_list = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+        super().__init__("Tanjiro Kamado", stat_list)
+        self.skill = [DragonSunHaloHeadDance()]
+        
 if __name__ == "__main__":
+    
     player = Character("Tanjiro Kamado")
 
     choice = int(input("Choose a skill (0: DragonSunHaloHeadDance, 1: FlashCut): "))

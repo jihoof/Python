@@ -29,7 +29,7 @@ class Skill:
             enemy.stat[field] = self.change_stat(player.stat[field], effect_str)
             enemy.effect_on_object.append([field, turn, effect_str])  
     
-    def change_stat(self, stat_str, player_stat):
+    def change_stat(self, player_stat, stat_str):
         if type(stat_str) == bool:
             return stat_str
 
