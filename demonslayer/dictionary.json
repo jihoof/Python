@@ -49,14 +49,13 @@
             "PhysicalAbilities": ["x_3", 7],
             "GuaranteedHitEffect": [true, 1]
         },
+        "enemyStatus": {
+            "RegenerationInhibitionLevel": ["+_5", 99],
+            "BrandOfTheSunLevel": ["+_10", 99]
+        },
         "enemyDamage": {
             "BreathMultiplier": 45,
             "MartialMultiplier": 15       
-        },
-
-        "enemyStatus": {
-            "RegenerationInhibitionLevel": 5,
-            "BrandOfTheSunLevel": 10
         }
     },
 
