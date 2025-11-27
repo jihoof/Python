@@ -20,9 +20,7 @@ class BrandOfTheSunX(BrandOfTheSun):
     def __init__(self):
         super().__init__()
 
-class IncreaseMartialArtLevel():
-    def __init__(self):
-        pass
+def increase_mkf
 
 class IncreaseBreathLevel():
     def __init__(self):

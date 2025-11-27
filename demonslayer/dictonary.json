@@ -1,0 +1,69 @@
+{
+    "Level" : "int, 레벨은 가장 기본적인 캐릭터 강화 방식. 캐릭터 등급별로 레벨당 스탯 증가량이 다름.",
+    "Grade" : "int, 등급은 총 12개. 등급에 따라서 최대 레벨이 증가. 처음 뽑으면 등급은 0급 최대레벨 100 그후 등급당 10렙",
+    "Awake" : "int, 각성 뽑기해서 중복 뽑으면 갈아서 강화. 5단계까지. 단계당 종합 능력치 10%",
+
+    "Max_UltimateGage" : "float, 궁극기 또는 사용에 필요한 궁극기 게이지의 최대량",
+    "UltimateGage" : "float, 게임 플레이중 실시간으로 변하는 실제 궁극기 게이지",
+    "Max_Stamina" : "float, 최대 스테미나양",
+    "Stamina" : "float, 게임 플레이중 실제 스테미나양",
+    
+    "Max_Health" : "float, 캐릭터의 최대 체력",
+    "Health" : "float, 게임 플레이중 캐릭터의 현재 남은 체력",
+    "Df_PhysicalAbilities" : "float, 캐릭터의 레벨·등급·각성 등을 모두 반영한 체술 능력치",
+    "PhysicalAbilities" : "float, 게임 중 캐릭터의 체술 능력치",
+    "Df_BreathLevel" : "float, 캐릭터의 레벨·등급·각성 등을 모두 반영한 호흡 능력치",
+    "BreathLevel" : "float, 게임 중 캐릭터의 호흡 능력치",
+    "Df_BloodDemonArtLevel" : "float, 캐릭터의 레벨·등급·각성 등을 모두 반영한 혈귀술 능력치",
+    "BloodDemonArtLevel" : "float, 게임 중 캐릭터의 혈귀술 능력치",
+    
+    "RangeCounterChance" : "float, 캐릭터의 원거리 공격 반격 확률",
+    "MeleeCounterChance" : "float, 캐릭터의 근접 공격 반격 확률",
+    "HybridCounterChance" : "float, 캐릭터의 복합 공격 반격 확률",
+    "DodgeChance" : "float, 캐릭터의 회피 확률",
+    "GuaranteedHitEffect" : "Bool, 캐릭터에게 필중 효과가 부여 되어있는지.",
+    
+    "PoisonDamage": "float, 턴 당 받을 독 데미지", 
+    "BurnDamage": "float, 턴 당 받을 화염 데미지", 
+    "FrostDamage": "float, 턴 당 받을 동상 데미지",
+    "ElectricShockDamage": "float, 턴 당 받을 감전 데미지",
+    "StunChance": "float, 행동 불가 확률",
+    "Stuned" : "bool, 기절 됨 or 안됨",
+
+    "DamageTakenMultiplier": "float, 받는 데미지 비율",
+    "DamageDealtMultiplier": "float, 입히는 데미지 비율 ",
+    "CriticalResistance": "float, 치명타 저항 비율",
+    "IgnoreCriticalResistance": "float, 치명타 저항 무시 비율",
+
+    "BrandOfTheSunLevel" : "int, 태양의 낙인 레벨. 태양의 낙인이 있는 적은 레벨당 받는데미지 100%증가 입히는 데미지 10% 감소 최대 99%. 최대 레벨 10",
+    "RegenerationInhibitionLevel" : "int, 재생 억제 레벨. 레벨당 재생능력 10% 감소 최대 99%. 최대 레벨 10",
+    "DemonSlayerMarkLevel" : "int, 반점 단계. 최대 5단계", 
+    "TransparentWorld" : "int, 내비세 단계. 최대 6단계",
+    "RedSword" : "int, 혁도 단계. 최대 6단계",
+
+    "DragonSunHaloHeadDance": {
+        "name": "태양의 호흡 제11형 「햇무리의 용·두무」",
+        "detail": "자신의 호흡이 200%증가한다(7턴 지속, 특수, 중복불가).\n자신의 체술이 200%증가한다(7턴 지속, 특수, 중복불가).\n자신에게 실명무시를 부여한다(1턴 지속).\n자신에게 필중 효과를 부여한다(1턴 지속).\n지정적에게 체술 1500%, 호흡 4500%의 복합 근접 공격(총 6타)를 가한다.\n지정적에게 재생억제(V)를 부여한다(99턴 지속, 특수, 중첩 가능, 제거/약화 불가).\n지정적에게 태양의 낙인(X)를 부여한다(99턴 지속, 특수, 최대 10중첩, 제거/약화 불가.)",
+        "selfEffect": {
+            "BreathLevel": ["x_3", 8],
+            "PhysicalAbilities": ["x_3", 7],
+            "GuaranteedHitEffect": [true, 1]
+        },
+        "enemyDamage": {
+            "BreathMultiplier": 45,
+            "MartialMultiplier": 15       
+        },
+
+        "enemyStatus": {
+            "RegenerationInhibitionLevel": 5,
+            "BrandOfTheSunLevel": 10
+        }
+    },
+
+    "FlashCut": {
+        "name": "일섬",
+        "detail": "자신의 호흡의 500%"
+    }
+    
+}
+

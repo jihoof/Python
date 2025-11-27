@@ -237,9 +237,11 @@ class EX(Character):
             stat_per_level_attack=250,
             base_stamina=base_stamina,
             max_stamina=max_stamina
-
+            
             
         )
+
+
 
 #실험용 첫 캐릭
 class WhatIsSoFunTsugikuniYoriichi(EX):
@@ -249,9 +251,10 @@ class WhatIsSoFunTsugikuniYoriichi(EX):
         self.skill2 = skill_breath.PhantomSunCrimson()
         self.skill3 = skill_breath.DragonSunHaloHeadDance()#분노 상태로 1,2,3스킬 다변형
         self.ultimate = ""
-        self.passives = [passive.ThePerfectSun(), passive.TheOneWhoOvercameTheCurseOfTheDemonSlayerMark(), passive.DemonSlayerMarkV(), passive.TransparantWorldVI(), passive.RedSowrdVI()]
+        self.passives = [passive.ThePerfectSun(), passive.TheOneWhoOvercameTheCurseOfTheDemonSlayerMark(), passive.DemonSlayerMark(), passive.TransparantWorldVI(), passive.RedSowrdVI()]
 
-#테스트
+#테스트 a = 1
+        
 if __name__ == "__main__":
 
     character1 = WhatIsSoFunTsugikuniYoriichi(
