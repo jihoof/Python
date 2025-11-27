@@ -32,8 +32,6 @@
 
     "DamageTakenMultiplier": "float, 받는 데미지 비율",
     "DamageDealtMultiplier": "float, 입히는 데미지 비율 ",
-    "CriticalResistance": "float, 치명타 저항 비율",
-    "IgnoreCriticalResistance": "float, 치명타 저항 무시 비율",
 
     "BrandOfTheSunLevel" : "int, 태양의 낙인 레벨. 태양의 낙인이 있는 적은 레벨당 받는데미지 100%증가 입히는 데미지 10% 감소 최대 99%. 최대 레벨 10",
     "RegenerationInhibitionLevel" : "int, 재생 억제 레벨. 레벨당 재생능력 10% 감소 최대 99%. 최대 레벨 10",

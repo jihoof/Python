@@ -17,7 +17,7 @@ class Skill:
         self.MartialMultiplier = self.enemyDamage['MartialMultiplier']
         self.RegenerationInhibitionLevel = self.enemyStatus['RegenerationInhibitionLevel']
         self.BrandOfTheSunLevel = self.enemyStatus['BrandOfTheSunLevel']
-    
+
     def status_use(self, player, enemy):
         for field, stat_str in self.selfEffect.items():
             effect_str, turn = stat_str[0], stat_str[1]      
@@ -60,3 +60,10 @@ class Skill:
         elif '-' in stat_str:
             subtraction = float(stat_str.split('_')[1])
             return player_stat + subtraction
+
+
+    def calculate_damage(self, player, enemy):
+        
+        damage = (((player.stat["BreathLevel"] * self.BreathMultiplier) + (player.stat["PhysicalAilities" * self.MartialMultiplier])) * enemy.stat["DamageTakenMultiplier"]) * player.stat["DamageDealMultiplier"]
+
+        return damage

@@ -5,7 +5,10 @@ class DragonSunHaloHeadDance(Skill):
         super().__init__("DragonSunHaloHeadDance")
 
     def attack_use(self, enemy, player):
-        damage = player.stat["BreathLevel"]
+        damage = self.calculate_damage(player, enemy)
+
+        enemy.stat["Health"] -= damage
+        
 
 class FlashCut(Skill):
     def __init__(self):
