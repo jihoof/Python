@@ -29,22 +29,23 @@ class Character:
                 self.stat[passive[0]] = self.original_stat(self.stat[passive[0]], passive[2])
                 self.effect_on_object.remove(passive)
 
-    def print_status(self):
+    def print_status(self, fields=[]):
         console = Console()
 
-        table = Table(title=f"[bold yellow]{self.name} Status[/bold yellow]", expand=True)
+        table = Table(title=f"[bold yellow]{self.name} Status[/bold yellow]")
 
         table.add_column("Stat", justify="left", style="cyan", no_wrap=True)
         table.add_column("Value", justify="center", style="bold white")
-        table.add_column("Description", justify="left", style="green")
 
         for key, value in self.stat.items():
-            desc = self.stat.get(key, "No description")
-            table.add_row(key, str(value), desc)
+            if key not in fields:
+                continue
+            table.add_row(str(key), str(value))
+            
+            if key == "RedSword":
+                break
 
         console.print(table)
-
-
 
 class R(Character):
     def __init__(self, name, skill, stat_list):
@@ -54,7 +55,7 @@ class Tanjiro(R):
     def __init__(self):
         skill = [DragonSunHaloHeadDance()]
         stat_list = [1, 1, 1, 1500, 1500, 100, 20, 1500, 1500, 100, 100, 50, 50, 0, 0, 0, 0, 0, 0, False, 0, 0, 0, 0, 0, False, 0, 0, 0, 0, 0, 0, 0]
-        super().__init__("RTanjiro", skill, stat_list)
+        super().__init__("R_Tanjiro", skill, stat_list)
 
 
                 

@@ -3,4 +3,4 @@ from module import *
 
 
 tanjiro = Tanjiro()
-
+tanjiro.print_status(["Level"])
