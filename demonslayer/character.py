@@ -7,7 +7,7 @@ class Character:
         self.name = name
         self.stat = {}
         self.skill = [DragonSunHaloHeadDance()]
-        self.passive_list = []
+        self.effect_on_object = []
         self.init_stat([100, 50, 30, 20, 10, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ])
     
     def init_stat(self, stat_list):
@@ -20,13 +20,13 @@ class Character:
     
     def next_turn(self):
         print("턴이 지났습니다")
-        for passive in self.passive_list:
+        for passive in self.effect_on_object:
             passive[1] -= 1
         
-        for passive in self.passive_list:
+        for passive in self.effect_on_object:
             if passive[1] == 0:
                 self.stat[passive[0]] = self.original_stat(self.stat[passive[0]], passive[2])
-                self.passive_list.remove(passive)
+                self.effect_on_object.remove(passive)
                 
 if __name__ == "__main__":
     player = Character("Tanjiro Kamado")

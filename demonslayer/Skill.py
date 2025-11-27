@@ -6,6 +6,8 @@ class Skill:
         
         self.detail = game_dict[skill_name]["detail"]
         self.selfEffect = game_dict[skill_name]["selfEffect"]
+        self.enemyStatus = game_dict[skill_name]["enemyStatus"]
+        self.enemyDamage = game_dict[skill_name]["enemyDamage"]
         
         self.enemyStatus = game_dict[skill_name]["enemyStatus"]
         self.enemyDamage = game_dict[skill_name]["enemyDamage"]
@@ -20,12 +22,12 @@ class Skill:
         for field, stat_str in self.selfEffect.items():
             effect_str, turn = stat_str[0], stat_str[1]      
             player.stat[field] = self.change_stat(player.stat[field], effect_str)
-            player.passive_list.append([field, turn, effect_str])  
+            player.effect_on_object.append([field, turn, effect_str])  
             
-        for field, stat_str in self.enemyEffect.items():
+        for field, stat_str in self.enemyStatus.items():
             effect_str, turn = stat_str[0], stat_str[1]      
             enemy.stat[field] = self.change_stat(player.stat[field], effect_str)
-            enemy.passive_list.append([field, turn, effect_str])  
+            enemy.effect_on_object.append([field, turn, effect_str])  
     
     def change_stat(self, stat_str, player_stat):
         if type(stat_str) == bool:
