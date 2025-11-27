@@ -59,6 +59,7 @@ class Tanjiro(R):
 
                 
 if __name__ == "__main__":
+    
     player = Character("Tanjiro Kamado")
 
     choice = int(input("Choose a skill (0: DragonSunHaloHeadDance, 1: FlashCut): "))
