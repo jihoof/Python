@@ -2,6 +2,7 @@ import setting
 import random 
 import module
 import getpass
+import time
 
 class Hackman:
     def __init__(self):
@@ -30,16 +31,16 @@ class Hackman:
                                     if setting.players.find_one({'nickname' : selected_user}):
                                         setting.players.delete_one({'nickname' : selected_user})
                                         print('유저가 정상적으로 삭제되었습니다.')
-                                        module.enter()
                                         continue
                                     else:
                                         print('해당 유저가 존재하지 않습니다.')
-                                        module.enter()
                                         continue 
                                 else:
+                                    module.enter()
                                     break
                         else:
                             print('로그아웃 합니다.')
+                            module.enter()
                             break
 
 
@@ -55,6 +56,10 @@ class Hackman:
                     self.nickname = nickname
                     module.enter()
                     break
+                else:
+                    print('닉네임 또는 비밀번호 일치하지않습니다.')
+                    module.enter()
+
             
             elif select == 3:
                 self.sign_up()
@@ -75,12 +80,28 @@ class Hackman:
 
                 'nickname' : nickname,
                 'password' :  password, 
-                'custom' : []
+                'custom' : [],
+                'cleared' : [],
+                'live_status' : {}
 
             })
+            print('정상적으로 계정이 생성되었습니다.')
+            module.enter()
 
     def sign_in(self):
-        return "nickname"
+        nickname = input('닉네임을 입력하세요: ')
+        password = getpass.getpass('비밀번호를 입력하세요: ')
+
+        if setting.players.find_one({
+
+            "nickname" : nickname,
+            "password" : password
+
+        }):
+            return nickname
+        else:
+            return False
+        
     
     def admin_login(self):
 
@@ -92,9 +113,11 @@ class Hackman:
         if password == admin_password:
             print('성공적으로 로그인 되었습니다.')
             print('환영합니다, 관리자님.')
+            module.enter()
             return True
         else:
             print('비밀번호가 잘못되었습니다.')
+            module.enter()
             return False
             
     def reveal_word(self, comp_word, used):
@@ -129,56 +152,166 @@ class Hackman:
     def print_user_list(self):
         user_list = list(setting.players.find({},{'_id' : 0, 'password' : 0}))
         module.beautiful_table(user_list, title = 'User List', show_index = True)
+    
+    def custom_edit(self):
+        add_word = input('커스텀 단어 리스트의 추가할 단어들을 입력해주세요.(종료하려면 0을 입력): ')
+
+        if add_word == '0':
+            return False
+        else:
+            add_word = add_word.split()
+            setting.players.update_one({
+                "nickname" : self.nickname
+            }, {
+                "$addToSet" : {
+                    "custom" : {
+                        "$each" : add_word
+                    },                    
+                }
+            })
+            print('정상적으로 추가 되었습니다.')
+            module.enter()
+            return True
+
+    
+    def custom_load(self):
+        custom = setting.players.find_one({
+
+            "nickname" : self.nickname
+
+        },{"_id":0,"custom":1})
+        return custom["custom"]
+
+    def custom_delete(self):
+        self.custom_list = self.custom_load()
+        module.beautiful_table(self.custom_list, title = 'Custom Word List', show_index = True)
+        delete_words = input('커스텀 단어 리스트의 삭제할 단어들을 입력해주세요.(종료하려면 0을 입력): ')
+        if delete_words == '0':
+            return False
+        else:
+            delete_words = delete_words.split()
+            for i in delete_words:
+                if i not in self.custom_list:
+                    print('Error index out of range. Error code: 374.')
+                    print('도움을 원하시면 고객센터에 연락해주시기 바랍니다.')
+                    return False
+            setting.players.update_one({
+                "nickname" : self.nickname
+            },{
+                "$pull" : {
+                    "custom" : {
+                        "$in" : delete_words
+                    }
+                }
+            })
+            print('정상적으로 삭제되었습니다.')
+            module.enter()
+            return True
+        
+
+
+    def custom_menu(self):
+        print('커스텀 매뉴에 오신걸 환영합니다.')
+        select = module.input_int(1,3,'커스텀 리스트를 수정하려면 1번, 되돌아가시려면 2번을, 플레이 하시려면 3번을 입력해주세요: ', '잘못된 입력입니다.')
+        if select == 1:
+            while True:
+                select = module.input_int(1,3, '단어를 추가하려면 1을, 삭제하려면 2를, 되돌아가려면 3을 입력해주세요: ', '잘못된 입력입니다.')
+                if select == 1:
+                    if not self.custom_edit():
+                        print('Unexpected error occured. Error code -1')
+                        module.enter()
+                        continue
+                elif select == 2:
+                    if not self.custom_delete():
+                        module.enter()
+                        continue
+                else:
+                    print('되돌아갑니다.')
+                    module.enter()
+                    break
+
+                    
+        elif select == 2:
+            return False
+        
+        else:
+            return self.custom_load()
+
 
     def main(self):
-        play_again = "none"
 
+        play_again = None
         intel_setup = True
         run = True
 
         while run:
-            if intel_setup == True:
-                comp_word = random.choice(setting.WORD_LIST)
-                print("Hangman game starts!")
-                USED = []
-                LIFE = 10
-                intel_setup = False
-            else:
-                pass
             
-            self.print_status(comp_word, USED, LIFE)
-            word_guessed = self.is_word_guessed(comp_word, USED)
+            print('환영합니다.')
+            select = module.input_str('플레이하고 싶은 레벨을 선택해주세요(very easy, easy, medium, hard, very hard, hell, custom): ', '잘못된 입력입니다.', ['very easy', 'easy', 'medium', 'hard', 'very hard', 'hell', 'custom'])
+            if select == 'custom':
+                custom = self.custom_menu()
+                if not custom:
+                    print('커스텀 메뉴를 종료합니다.')
+                    module.enter()
+                    continue
+                else:
+                    self.word_list = custom
 
-            if LIFE == 0:
-                print(f"The answer was {comp_word}. ")
-                play_again = input("Do you want to play another game? ")
-            elif word_guessed == True:
-                print("Hangman Survived!")
-                play_again = input("Do you want to play another game? ")
-
-            if play_again == "yes":
-                intel_setup = True
-                play_again = "none"
-                continue
-            elif play_again == "no":
-                break
-
-
-            player_word = input("Choose a character: ")
-            if player_word in USED:
-                print("You have already checked this character. Try another one.")
-                continue
             else:
-                if player_word not in comp_word:
-                    LIFE -= 1
-                USED.append(player_word)
+                difficulty = setting.levels.find_one({
+
+                        "difficulty" : select
+
+                    }, {"_id":0, "word_list":1})
+                self.word_list = difficulty["word_list"]
+                module.enter()
             
-            if play_again == "yes":
-                intel_setup = True
-                play_again = "none"
-                continue
-            elif play_again == "no":
-                break
+            while True:
+                if intel_setup == True:
+                    print("Hangman game starts!")
+                    comp_word = random.choice(self.word_list)
+                    USED = []
+                    LIFE = 10
+                    intel_setup = False
+                else:
+                    pass
+                
+                module.clear()
+                self.print_status(comp_word, USED, LIFE)
+                word_guessed = self.is_word_guessed(comp_word, USED)
+
+                if LIFE == 0:
+                    print(f"The answer was {comp_word}. ")
+                    play_again = input("Do you want to play another game(yes/no): ")
+                elif word_guessed == True:
+                    print("Hangman Survived!")
+                    play_again = input("Do you want to play another game(yes/no): ")
+
+                if play_again == "yes":
+                    intel_setup = True
+                    play_again = "none"
+                    break
+                elif play_again == "no":
+                    module.shut_down()
+                    
+
+
+                player_word = input("Choose a character: ")
+                if player_word in USED:
+                    print("You have already checked this character. Try another one.")
+                    module.enter()
+                    continue
+                else:
+                    if player_word not in comp_word:
+                        LIFE -= 1
+                    USED.append(player_word)
+                
+                if play_again == "yes":
+                    intel_setup = True
+                    play_again = "none"
+                    break
+                elif play_again == "no":
+                    module.shut_down()
 
 game = Hackman()
 game.main()
