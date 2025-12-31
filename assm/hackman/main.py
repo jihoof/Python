@@ -82,7 +82,7 @@ class Hackman:
                 'password' :  password, 
                 'custom' : [],
                 'cleared' : [],
-                'live_status' : {}
+                'live_status' : {"left_life" : 0, "current_used" : [], "current_word" : 'None', "playing" : False}
 
             })
             print('정상적으로 계정이 생성되었습니다.')
@@ -207,7 +207,7 @@ class Hackman:
             print('정상적으로 삭제되었습니다.')
             module.enter()
             return True
-        
+
 
 
     def custom_menu(self):
@@ -237,34 +237,65 @@ class Hackman:
         else:
             return self.custom_load()
 
+    def update_status(self, life, used_word):
+        setting.players.update_one({
+            "nickname" : self.nickname
+        }, {
+            "$set" : {
+                "live_status.left_life" : life,
+                "live_status.current_used" : used_word
+                }
+            })
+    def reset_status(self):
+        setting.players.update_one({
+            "nickname" : self.nickname
+        }, {
+            "$set" : {
+                "live_status.left_life" : 0,
+                "live_status.current_used" : [],
+                "live_statuse.current_word" : "None",
+                "live_statuse.playing" : False
+                }
+            })      
+
 
     def main(self):
 
         play_again = None
         intel_setup = True
         run = True
+        live_status = setting.players.find_one({
+            'nickname' : self.nickname
+        })["live_status"]
 
         while run:
-            
             print('환영합니다.')
-            select = module.input_str('플레이하고 싶은 레벨을 선택해주세요(very easy, easy, medium, hard, very hard, hell, custom): ', '잘못된 입력입니다.', ['very easy', 'easy', 'medium', 'hard', 'very hard', 'hell', 'custom'])
-            if select == 'custom':
-                custom = self.custom_menu()
-                if not custom:
-                    print('커스텀 메뉴를 종료합니다.')
-                    module.enter()
-                    continue
-                else:
-                    self.word_list = custom
-
+            if live_status["playing"]:
+               select = module.input_int(0, 1, '진행하던 게임이 존재합니다. 이어 플레이하시겠습니다까? (이어하려면 0을 새로 시작하려면 1을 입력하세요.) ', '잘못된 입력입니다.')
+               if select == 0:
+                   intel_setup = False
+                   comp_word = live_status["current_word"]
+                   USED = live_status["current_used"]
+                   LIFE = live_status["left_life"]
             else:
-                difficulty = setting.levels.find_one({
+                select = module.input_str('플레이하고 싶은 레벨을 선택해주세요(very easy, easy, medium, hard, very hard, hell, custom): ', '잘못된 입력입니다.', ['very easy', 'easy', 'medium', 'hard', 'very hard', 'hell', 'custom'])
+                if select == 'custom':
+                    custom = self.custom_menu()
+                    if not custom:
+                        print('커스텀 메뉴를 종료합니다.')
+                        module.enter()
+                        continue
+                    else:
+                        self.word_list = custom
 
-                        "difficulty" : select
+                else:
+                    difficulty = setting.levels.find_one({
 
-                    }, {"_id":0, "word_list":1})
-                self.word_list = difficulty["word_list"]
-                module.enter()
+                            "difficulty" : select
+
+                        }, {"_id":0, "word_list":1})
+                    self.word_list = difficulty["word_list"]
+                    module.enter()
             
             while True:
                 if intel_setup == True:
@@ -273,18 +304,30 @@ class Hackman:
                     USED = []
                     LIFE = 10
                     intel_setup = False
+                    # 'live_status' : {"left_life" : 0, "current_used" : []0, "current_word" : 'None', "playing" : False}
+                    setting.players.update_one({
+                        "nickname" : self.nickname
+                    }, {
+                        "$set" : {
+                            "live_status.current_word" : comp_word,
+                            "live_status.playing" : True
+                        }
+                    })
                 else:
                     pass
                 
                 module.clear()
                 self.print_status(comp_word, USED, LIFE)
                 word_guessed = self.is_word_guessed(comp_word, USED)
+                self.update_status(LIFE, USED)
 
                 if LIFE == 0:
                     print(f"The answer was {comp_word}. ")
+                    self.reset_status()
                     play_again = input("Do you want to play another game(yes/no): ")
                 elif word_guessed == True:
                     print("Hangman Survived!")
+                    self.reset_status()
                     play_again = input("Do you want to play another game(yes/no): ")
 
                 if play_again == "yes":

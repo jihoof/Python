@@ -36,5 +36,6 @@ def llm_answer(query):
     result = response.json()
     return result["choices"][0]["message"]["content"]
 
-answer = llm_answer("Hello, how are you?")
+
+answer = llm_answer("What is 1+1")
 print(answer)
