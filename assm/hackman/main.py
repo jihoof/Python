@@ -278,7 +278,7 @@ class Hackman:
                     if not custom:
                         print('커스텀 메뉴를 종료합니다.')
                         module.enter()
-                        continue
+                        continue 
                     else:
                         self.word_list = custom
 
@@ -297,7 +297,6 @@ class Hackman:
             
             while True:
                 print("Hangman game starts!")
-            #
                 setting.players.update_one({
                     "nickname" : self.nickname
                 }, {
