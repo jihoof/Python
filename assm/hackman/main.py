@@ -2,7 +2,6 @@ import setting
 import random 
 import module
 import getpass
-import time
 
 class Hackman:
     def __init__(self):
@@ -254,6 +253,8 @@ class Hackman:
                 'nickname' : self.nickname
             })["live_status"]
             print('환영합니다.')
+            
+            history = False
             if live_status["playing"]:
                 select = module.input_int(
                     0, 1, 
@@ -261,14 +262,12 @@ class Hackman:
                     '잘못된 입력입니다.'
                 )
                 if select == 0:
+                    history = True
                     comp_word = live_status["current_word"]
                     USED = live_status["current_used"]
                     LIFE = live_status["left_life"]
-                else:
-                    comp_word = random.choice(self.word_list)
-                    USED = []
-                    LIFE = 10
-            else:
+                    
+            if history == False:
                 select = module.input_str(
                     '플레이하고 싶은 레벨을 선택해주세요(very easy, easy, medium, hard, very hard, hell, custom): ', 
                     '잘못된 입력입니다.', 
