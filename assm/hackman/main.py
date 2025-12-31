@@ -297,7 +297,7 @@ class Hackman:
             
             while True:
                 print("Hangman game starts!")
-            
+            #
                 setting.players.update_one({
                     "nickname" : self.nickname
                 }, {
