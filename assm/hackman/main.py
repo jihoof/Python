@@ -130,8 +130,8 @@ class Hackman:
         tmp = list(comp_word)
         tmp2 = len(tmp)
         tmp3 = 0
-        for i in used:
-            if i in comp_word:
+        for i in comp_word:
+            if i in used:
                 tmp3 += 1
         if tmp3 == tmp2:
             return True
