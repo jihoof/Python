@@ -248,11 +248,11 @@ class Hackman:
     def main(self):
         play_again = None
         run = True
-        live_status = setting.players.find_one({
-            'nickname' : self.nickname
-        })["live_status"]
 
         while run:
+            live_status = setting.players.find_one({
+                'nickname' : self.nickname
+            })["live_status"]
             print('환영합니다.')
             if live_status["playing"]:
                 select = module.input_int(
@@ -291,6 +291,10 @@ class Hackman:
                     })
                     self.word_list = difficulty["word_list"]
                     module.enter()
+
+                comp_word = random.choice(self.word_list)
+                USED = []
+                LIFE = 10
             
             while True:
                 print("Hangman game starts!")
@@ -308,6 +312,7 @@ class Hackman:
                 self.print_status(comp_word, USED, LIFE)
                 word_guessed = self.is_word_guessed(comp_word, USED)
                 self.update_status(LIFE, USED)
+                play_again = 'none'
 
                 if LIFE == 0:
                     print(f"The answer was {comp_word}. ")
