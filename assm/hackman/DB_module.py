@@ -2,6 +2,7 @@ from pymongo import MongoClient
 from dotenv import load_dotenv
 import os
 import json
+import time
 
 # pip install "paramiko<3.0"   
 load_dotenv()
@@ -22,7 +23,7 @@ import warnings
 warnings.filterwarnings("ignore", module="paramiko")
 from sshtunnel import SSHTunnelForwarder
 
-
+print('서버 데이터 로딩중...')
 server = SSHTunnelForwarder(
     (SSH_HOST, SSH_PORT),
     ssh_username=SSH_USER,
@@ -35,7 +36,8 @@ client = MongoClient(
     f"mongodb://{MONGO_USER}:{MONGO_PASSWORD}"
     f"@127.0.0.1:{server.local_bind_port}/?authSource={MONGO_AUTH_DB}"
     )
-
+print('로딩 완료!')
+time.sleep(0.15)
 
 
 def clean_doc(listt):

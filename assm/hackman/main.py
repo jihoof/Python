@@ -2,6 +2,7 @@ import setting
 import random 
 import module
 import getpass
+import llm
 
 class Hackman:
     def __init__(self):
@@ -76,10 +77,40 @@ class Hackman:
                 'cleared' : [],
                 'live_status' : {
                     "left_life" : 0, "current_used" : [], "current_word" : 'None', "playing" : False
-                }
+                },
+                'ai_list' : [],
+                'bought_dlc' : [],
+                'coin' : 0
             })
             print('정상적으로 계정이 생성되었습니다.')
             module.enter()
+
+    def give_coin(self, difficulty):
+        if difficulty == 'very easy':
+            giving_coin = 1
+        elif difficulty == 'easy':
+            giving_coin = 5
+        elif difficulty == 'medium':
+            giving_coin = 10
+        elif difficulty == 'hard':
+            giving_coin = 20
+        elif difficulty == 'very hard':
+            giving_coin = 50
+        elif difficulty == 'hell':
+            giving_coin = 100
+    
+    def update_coin(self, amount):
+        setting.players.update_one({
+            'nickname' : self.nickname
+        }, {
+            '$inc' : {
+                "coin" : amount
+            }                
+        })
+
+    def ai_word_list(self):
+        answer = llm.llm_answer("Make a 5 word list that could be used in hangman game. The diffculty must be very hard. Only english word, but it does not to be on every dictionary Give your answer in 'word1 word2 word3 ...' form'")
+        return answer.split()
 
     def sign_in(self):
         nickname = input('닉네임을 입력하세요: ')
@@ -244,106 +275,155 @@ class Hackman:
             }
         })      
 
+    def dlc(self):
+        while True:
+            print('Dlc 상점에 오신걸 환영합니다.')
+            # custom 유저 한테 업로드 
+            # 가격 유저 업로드 가격 비례 코인 지불 가격 2배
+            # 다른 구매하면 자기한테 알림오고 수수료 50% 코인(like 대한민국 세금) 지급
+            select = module.input_int(1, 2, 'Dlc 상점에 업로드 현재 커스텀 리스트를 업로드하려면 1을 Dlc 상점을 구경하려면 2를 입력해주세요: ', '잘못된 입력입니다.')
+            if select == 1:
+                custom_list = self.custom_load()
+                if len(custom_list) == 0:
+                    print('커스텀 리스트에 아무 단어도 존재하지 않습니다.')
+                    print('전 화면으로 되돌하갑니다. ')
+                    continue
+                else:
+                    upload_status = self.upload_custom(custom_list)
+                    if not upload_status:
+                        print('Unexpected critical error occured. Error code: -1336')
+                        print('도움을 위해선 고객센터에 연락해주시기 바랍니다. 전화번호: 1336')
+            else:
+                print('현재 구입가능한 Dlc 상점의 상품들을 보여드리겠습니다. ')
+                print('정보 로딩중...')
+                product_list = list(setting.dlc.find({},{'id_':0}))
+                print('로딩 완료!')
+                module.beautiful_table(product_list, title = '상품 정보', show_index = True)
+                
+
+
+    def upload_custom(self, custom_list):
+        #TODO by 문 요준, 요준 문 가격 대비 코인 차감
+        name = input('Dlc에 업로드할 단어리스트의 이름을 입력해주세여: ')
+        price = module.input_int(0, 1000, 'Dlc에 업로드할 단어리스트의 가격을 설정해주세요(0 ~ 1000): ', '잘못된 입력입니다.')
+        setting.dlc.insert_one({
+            'name' : name,
+            'price' : price,
+            'word_list' : custom_list
+        })
+        return True
+
+
+
     def main(self):
-        play_again = None
+        play_again = None 
         run = True
 
         while run:
-            live_status = setting.players.find_one({
-                'nickname' : self.nickname
-            })["live_status"]
-            print('환영합니다.')
-            
-            history = False
-            if live_status["playing"]:
-                select = module.input_int(
-                    0, 1, 
-                    '진행하던 게임이 존재합니다. 이어 플레이하시겠습니다까? (이어하려면 0을 새로 시작하려면 1을 입력하세요.) ', 
-                    '잘못된 입력입니다.'
-                )
-                if select == 0:
-                    history = True
-                    comp_word = live_status["current_word"]
-                    USED = live_status["current_used"]
-                    LIFE = live_status["left_life"]
-                    
-            if history == False:
-                select = module.input_str(
-                    '플레이하고 싶은 레벨을 선택해주세요(very easy, easy, medium, hard, very hard, hell, custom): ', 
-                    '잘못된 입력입니다.', 
-                    ['very easy', 'easy', 'medium', 'hard', 'very hard', 'hell', 'custom']
-                )
-                if select == 'custom':
-                    custom = self.custom_menu()
-                    if not custom:
-                        print('커스텀 메뉴를 종료합니다.')
-                        module.enter()
-                        continue 
+            select = module.input_int(1,2,'게임을 플레이하려면 1을 Dlc 상점을 오픈하려면 2을 입력해주세요: ', '잘못된 입력입니다.')
+            if select == 1:
+                live_status = setting.players.find_one({
+                    'nickname' : self.nickname
+                })["live_status"]
+                print('환영합니다.')
+                
+                history = False
+                if live_status["playing"]:
+                    select = module.input_int(
+                        0, 1, 
+                        '진행하던 게임이 존재합니다. 이어 플레이하시겠습니다까? (이어하려면 0을 새로 시작하려면 1을 입력하세요.) ', 
+                        '잘못된 입력입니다.'
+                    )
+                    if select == 0:
+                        history = True
+                        comp_word = live_status["current_word"]
+                        USED = live_status["current_used"]
+                        LIFE = live_status["left_life"]
+                        
+                if history == False:
+                    select = module.input_str(
+                        '플레이하고 싶은 레벨을 선택해주세요(very easy, easy, medium, hard, very hard, hell, custom): ', 
+                        '잘못된 입력입니다.', 
+                        ['very easy', 'easy', 'medium', 'hard', 'very hard', 'hell', 'custom']
+                    )
+                    if select == 'custom':
+                        custom = self.custom_menu()
+                        if not custom:
+                            print('커스텀 메뉴를 종료합니다.')
+                            module.enter()
+                            continue 
+                        else:
+                            self.word_list = custom
+
                     else:
-                        self.word_list = custom
+                        difficulty = setting.levels.find_one({
+                            "difficulty" : select
+                        }, {
+                            "_id":0, "word_list":1
+                        })
+                        self.word_list = difficulty["word_list"]
+                        giving_coin = self.give_coin(select)
+                        module.enter()
 
-                else:
-                    difficulty = setting.levels.find_one({
-                        "difficulty" : select
-                    }, {
-                        "_id":0, "word_list":1
-                    })
-                    self.word_list = difficulty["word_list"]
-                    module.enter()
-
-                comp_word = random.choice(self.word_list)
-                USED = []
-                LIFE = 10
-            
-            while True:
-                print("Hangman game starts!")
-                setting.players.update_one({
-                    "nickname" : self.nickname
-                }, {
-                    "$set" : {
-                        "live_status.current_word" : comp_word,
-                        "live_status.playing" : True
-                    }
-                })
-
-                module.clear()
-                self.print_status(comp_word, USED, LIFE)
-                word_guessed = self.is_word_guessed(comp_word, USED)
-                self.update_status(LIFE, USED)
-                play_again = 'none'
-
-                if LIFE == 0:
-                    print(f"The answer was {comp_word}. ")
-                    self.reset_status()
-                    play_again = module.input_str("Do you want to play another game(Y/n): ", '잘못된 입력입니다.', ['Y', 'y', 'N', 'n'])
-                elif word_guessed == True:
-                    print("Hangman Survived!")
-                    self.reset_status()
-                    play_again = module.input_str("Do you want to play another game(Y/n): ", '잘못된 입력입니다.', ['Y', 'y', 'N', 'n'])
-
-                if play_again.lower() == "y":
-                    self.reset_status() 
-                    break
-                elif play_again.lower() == "n":
-                    self.reset_status()
-                    module.shut_down()
-                    
+                    comp_word = random.choice(self.word_list)
+                    USED = []
+                    LIFE = 10
+                
                 while True:
-                    player_word = input("Choose a character: ")
-                    if len(player_word) == 1:
+                    print("Hangman game starts!")
+                    setting.players.update_one({
+                        "nickname" : self.nickname
+                    }, {
+                        "$set" : {
+                            "live_status.current_word" : comp_word,
+                            "live_status.playing" : True
+                        }
+                    })
+
+                    module.clear()
+                    self.print_status(comp_word, USED, LIFE)
+                    word_guessed = self.is_word_guessed(comp_word, USED)
+                    self.update_status(LIFE, USED)
+                    play_again = 'none'
+
+                    if LIFE == 0:
+                        print(f"The answer was {comp_word}. ")
+                        self.reset_status()
+                        play_again = module.input_str("Do you want to play another game(Y/n): ", '잘못된 입력입니다.', ['Y', 'y', 'N', 'n'])
+                    elif word_guessed == True:
+                        print("Hangman Survived!")
+                        self.reset_status()
+                        self.update_coin(giving_coin)
+                        print(f'게임을 클리어하여, 난이도에 따라 코인 {giving_coin}개가 지급되었습니다.')
+                        play_again = module.input_str("Do you want to play another game(Y/n): ", '잘못된 입력입니다.', ['Y', 'y', 'N', 'n'])
+
+                    if play_again.lower() == "y":
+                        self.reset_status() 
                         break
-                    print("한 글자만 입력해주세요.")
-                    
-                if player_word in USED:
-                    print("You have already checked this character. Try another one.")
-                    module.enter()
-                    continue
-                else:
-                    if player_word not in comp_word:
-                        LIFE -= 1
-                    USED.append(player_word)
+                    elif play_again.lower() == "n":
+                        self.reset_status()
+                        module.shut_down()
+                        
+                    while True:
+                        player_word = input("Choose a character: ")
+                        if len(player_word) == 1:
+                            break
+                        print("한 글자만 입력해주세요.")
+                        
+                    if player_word in USED:
+                        print("You have already checked this character. Try another one.")
+                        module.enter()
+                        continue
+                    else:
+                        if player_word not in comp_word:
+                            LIFE -= 1
+                        USED.append(player_word)
             
+            else:
+                self.dlc()
 
 game = Hackman()
 game.main()
+
+
 
