@@ -99,6 +99,14 @@ class Hackman:
         elif difficulty == 'hell':
             giving_coin = 100
     
+    def load_coin(self):
+        coin = setting.players.find_one({
+            "nickname" : self.nickname
+        },{
+            "_id":0,"coin":1
+        })
+        return coin
+    
     def update_coin(self, amount):
         setting.players.update_one({
             'nickname' : self.nickname
@@ -276,6 +284,7 @@ class Hackman:
         })      
 
     def dlc(self):
+        #TODO 현재 보유 코인 출력
         while True:
             print('Dlc 상점에 오신걸 환영합니다.')
             # custom 유저 한테 업로드 
@@ -299,19 +308,64 @@ class Hackman:
                 product_list = list(setting.dlc.find({},{'id_':0}))
                 print('로딩 완료!')
                 module.beautiful_table(product_list, title = '상품 정보', show_index = True)
+                select = input('구매할 상품의 이름을 입력해주세요.')
                 
-
+    def buy_dlc(self, price):
+        pass
 
     def upload_custom(self, custom_list):
-        #TODO by 문 요준, 요준 문 가격 대비 코인 차감
         name = input('Dlc에 업로드할 단어리스트의 이름을 입력해주세여: ')
-        price = module.input_int(0, 1000, 'Dlc에 업로드할 단어리스트의 가격을 설정해주세요(0 ~ 1000): ', '잘못된 입력입니다.')
-        setting.dlc.insert_one({
-            'name' : name,
-            'price' : price,
-            'word_list' : custom_list
-        })
-        return True
+        price = module.input_int(0, 99999, 'Dlc에 업로드할 단어리스트의 가격을 설정해주세요(0 ~ 99,999): ', '잘못된 입력입니다.')
+        print('가격이 상정되었습니다. 가격 비례 수수료와 업로드 가격을 자동 측정합니다.')
+        charge = 30
+        print('가격 책정중...')
+        upload_fee = llm.llm_answer(f"""
+        You are evaluating a product listed in a DLC shop for a game.
+        The product’s listed price is {price}.
+
+        The platform takes a fixed 30% commission fee from all sales. This commission must be fully considered.
+
+        Determine a reasonable **initial registration cost** to list this product. Your calculation must:
+        1. Consider net revenue after the 30% commission.
+        2. Never return the original price or a value equal to the listed price.
+        3. Factor in expected sales, market fairness, and reasonable profit margins.
+        4. Reflect risk mitigation for unsold products (i.e., the registration cost should not be higher than likely net revenue per sale).
+
+        Return only a single integer value representing the final registration cost.
+        Do **not** include explanations, text, symbols, or formatting — numbers only (int).
+        """)
+        upload_fee = int(upload_fee)
+        print('책정 완료!')
+        select = module.input_int(f'책정 결과, 업로드 비용은 {upload_fee}이고 수수료는 30%입니다. 상품은 dlc상점에 등록하겠습니까? 등록하려면 1을 취소하려면 2를 입력하세요: ')
+        if select == 1:
+            if not setting.dlc.find_one({
+                'name' : name
+            }):  
+                print('등록비를 약탈합니다.')
+                coin = self.load_coin()
+                if coin > upload_fee:
+                    setting.dlc.insert_one({
+                        'name' : name,
+                        'price' : price,
+                        'word_list' : custom_list,
+                        'charge' : charge
+                    })
+                    print('상품이 정상적으로 등록되었습니다.')
+                    return True
+                else:
+                    print('이미 존재하는 상품 이름입니다.')
+                    module.enter()
+                    return False
+            else:
+                print('코인 부족하여 등록에 실패했습니다.')
+                print('메인화면으로 되돌아갑니다.')
+                module.enter()
+                return False
+                
+        else:
+            print('원래 화면으로 되돌아갑니다.')
+            module.enter()
+            return False
 
 
 
@@ -422,7 +476,7 @@ class Hackman:
             else:
                 self.dlc()
 
-game = Hackman()
+game = Hackman()    
 game.main()
 
 
