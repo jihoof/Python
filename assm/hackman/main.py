@@ -60,7 +60,10 @@ class Hackman:
             
             elif select == 3:
                 self.sign_up()
-                
+    
+    # ======================
+    # Auth
+    # ====================== 
     def sign_up(self):
         nickname = input('아이디를 입력하세요: ')
         password = getpass.getpass('비밀번호 입력하세요: ')
@@ -84,42 +87,7 @@ class Hackman:
             })
             print('정상적으로 계정이 생성되었습니다.')
             module.enter()
-
-    def give_coin(self, difficulty):
-        if difficulty == 'very easy':
-            giving_coin = 1
-        elif difficulty == 'easy':
-            giving_coin = 5
-        elif difficulty == 'medium':
-            giving_coin = 10
-        elif difficulty == 'hard':
-            giving_coin = 20
-        elif difficulty == 'very hard':
-            giving_coin = 50
-        elif difficulty == 'hell':
-            giving_coin = 100
     
-    def load_coin(self):
-        coin = setting.players.find_one({
-            "nickname" : self.nickname
-        },{
-            "_id":0,"coin":1
-        })
-        return coin
-    
-    def update_coin(self, amount):
-        setting.players.update_one({
-            'nickname' : self.nickname
-        }, {
-            '$inc' : {
-                "coin" : amount
-            }                
-        })
-
-    def ai_word_list(self):
-        answer = llm.llm_answer("Make a 5 word list that could be used in hangman game. The diffculty must be very hard. Only english word, but it does not to be on every dictionary Give your answer in 'word1 word2 word3 ...' form'")
-        return answer.split()
-
     def sign_in(self):
         nickname = input('닉네임을 입력하세요: ')
         password = getpass.getpass('비밀번호를 입력하세요: ')
@@ -131,7 +99,7 @@ class Hackman:
             return nickname
         else:
             return False
-        
+       
     def admin_login(self):
         password = getpass.getpass('관리자 비밀번호 입력하세요: ')
 
@@ -147,40 +115,51 @@ class Hackman:
             print('비밀번호가 잘못되었습니다.')
             module.enter()
             return False
-            
-    def reveal_word(self, comp_word, used):
-        for i in comp_word:
-            if i not in used:
-                print("_", end = " ")
-            else:
-                print(i, end = " ")
-        return ""
-
-    def print_status(self, comp_word, used, life):
-        print("---------------------------------------------")
-        print(f"Word: ", end = ' ')
-        self.reveal_word(comp_word, used)
-        print()
-        print(f"Used: {' '.join(used)}")
-        print(f"Life: {life}")
-        print("---------------------------------------------")
-
-    def is_word_guessed(self, comp_word, used):
-        tmp = list(comp_word)
-        tmp2 = len(tmp)
-        tmp3 = 0
-        for i in comp_word:
-            if i in used:
-                tmp3 += 1
-        if tmp3 == tmp2:
-            return True
-        else:
-            return False
-        
-    def print_user_list(self):
-        user_list = list(setting.players.find({},{'_id' : 0, 'password' : 0}))
-        module.beautiful_table(user_list, title = 'User List', show_index = True)
     
+    
+    # ======================
+    # Coin
+    # ====================== 
+    def give_coin(self, difficulty):
+        if difficulty == 'very easy':
+            giving_coin = 1
+        elif difficulty == 'easy':
+            giving_coin = 5
+        elif difficulty == 'medium':
+            giving_coin = 10
+        elif difficulty == 'hard':
+            giving_coin = 20
+        elif difficulty == 'very hard':
+            giving_coin = 50
+        elif difficulty == 'hell':
+            giving_coin = 100
+        return giving_coin
+    
+    def load_coin(self):
+        coin = setting.players.find_one({
+            "nickname" : self.nickname
+        },{
+            "_id":0,"coin":1
+        })
+        return coin['coin']
+    
+    def update_coin(self, amount):
+        setting.players.update_one({
+            'nickname' : self.nickname
+        }, {
+            '$inc' : {
+                "coin" : amount
+            }                
+        })
+
+    def ai_word_list(self):
+        answer = llm.llm_answer("Make a 5 word list that could be used in hangman game. The diffculty must be very hard. Only english word, but it does not to be on every dictionary Give your answer in 'word1 word2 word3 ...' form'")
+        return answer.split()
+
+     
+    # ======================
+    # Custom
+    # ====================== 
     def custom_edit(self):
         add_word = input('커스텀 단어 리스트의 추가할 단어들을 입력해주세요.(종료하려면 0을 입력): ')
 
@@ -261,6 +240,11 @@ class Hackman:
         else:
             return self.custom_load()
 
+    
+
+    # ======================
+    # Status
+    # ====================== 
     def update_status(self, life, used_word):
         setting.players.update_one({
             "nickname" : self.nickname
@@ -283,14 +267,17 @@ class Hackman:
             }
         })      
 
+
+    # ======================
+    # Dlc
+    # ====================== 
     def dlc(self):
-        #TODO 현재 보유 코인 출력
         while True:
             print('Dlc 상점에 오신걸 환영합니다.')
             # custom 유저 한테 업로드 
             # 가격 유저 업로드 가격 비례 코인 지불 가격 2배
             # 다른 구매하면 자기한테 알림오고 수수료 50% 코인(like 대한민국 세금) 지급
-            select = module.input_int(1, 2, 'Dlc 상점에 업로드 현재 커스텀 리스트를 업로드하려면 1을 Dlc 상점을 구경하려면 2를 입력해주세요: ', '잘못된 입력입니다.')
+            select = module.input_int(1, 2, 'Dlc 상점에 업로드 현재 커스텀 리스트를 업로드하려면 1을, Dlc 상점을 구경하려면 2를 입력해주세요: ', '잘못된 입력입니다.')
             if select == 1:
                 custom_list = self.custom_load()
                 if len(custom_list) == 0:
@@ -305,70 +292,153 @@ class Hackman:
             else:
                 print('현재 구입가능한 Dlc 상점의 상품들을 보여드리겠습니다. ')
                 print('정보 로딩중...')
-                product_list = list(setting.dlc.find({},{'id_':0}))
+                product_list = list(setting.dlc.find({}, {'_id': 0}))
                 print('로딩 완료!')
                 module.beautiful_table(product_list, title = '상품 정보', show_index = True)
                 select = input('구매할 상품의 이름을 입력해주세요.')
                 
-    def buy_dlc(self, price):
-        pass
+                product = None
+                for p in product_list:
+                    if p['name'] == select:
+                        product = p
 
+                if not product:
+                    print('이름과 일치하는 Dlc 상품이 없습니다.')
+                    print('처음으로 돌아갑니다.')
+                    continue
+                
+                if not self.buy_dlc(product):
+                    print('Unexpected critical error occured. Error code: -133.6')
+                    print('도움을 위해선 고객센터에 연락해주시기 바랍니다. 전화번호: 133.6')
+                    continue
+                
     def upload_custom(self, custom_list):
         name = input('Dlc에 업로드할 단어리스트의 이름을 입력해주세여: ')
         price = module.input_int(0, 99999, 'Dlc에 업로드할 단어리스트의 가격을 설정해주세요(0 ~ 99,999): ', '잘못된 입력입니다.')
+        
         print('가격이 상정되었습니다. 가격 비례 수수료와 업로드 가격을 자동 측정합니다.')
-        charge = 30
         print('가격 책정중...')
+        
+        charge = 30
         upload_fee = llm.llm_answer(f"""
-        You are evaluating a product listed in a DLC shop for a game.
-        The product’s listed price is {price}.
+            You are evaluating a product listed in a DLC shop for a game.
+            The product’s listed price is {price}.
 
-        The platform takes a fixed 30% commission fee from all sales. This commission must be fully considered.
+            The platform takes a fixed 30% commission fee from all sales. This commission must be fully considered.
 
-        Determine a reasonable **initial registration cost** to list this product. Your calculation must:
-        1. Consider net revenue after the 30% commission.
-        2. Never return the original price or a value equal to the listed price.
-        3. Factor in expected sales, market fairness, and reasonable profit margins.
-        4. Reflect risk mitigation for unsold products (i.e., the registration cost should not be higher than likely net revenue per sale).
+            Determine a reasonable **initial registration cost** to list this product. Your calculation must:
+            1. Consider net revenue after the 30% commission.
+            2. Never return the original price or a value equal to the listed price.
+            3. Factor in expected sales, market fairness, and reasonable profit margins.
+            4. Reflect risk mitigation for unsold products (i.e., the registration cost should not be higher than likely net revenue per sale).
 
-        Return only a single integer value representing the final registration cost.
-        Do **not** include explanations, text, symbols, or formatting — numbers only (int).
+            Return only a single integer value representing the final registration cost.
+            Do **not** include explanations, text, symbols, or formatting — numbers only (int).
         """)
         upload_fee = int(upload_fee)
+        
         print('책정 완료!')
+        
         select = module.input_int(f'책정 결과, 업로드 비용은 {upload_fee}이고 수수료는 30%입니다. 상품은 dlc상점에 등록하겠습니까? 등록하려면 1을 취소하려면 2를 입력하세요: ')
         if select == 1:
-            if not setting.dlc.find_one({
-                'name' : name
-            }):  
+            if not setting.dlc.find_one({'name' : name}):  
                 print('등록비를 약탈합니다.')
                 coin = self.load_coin()
                 if coin > upload_fee:
                     setting.dlc.insert_one({
+                        'owner': self.nickname,
                         'name' : name,
                         'price' : price,
                         'word_list' : custom_list,
                         'charge' : charge
                     })
+                    self.update_coin(-upload_fee)
                     print('상품이 정상적으로 등록되었습니다.')
                     return True
                 else:
-                    print('이미 존재하는 상품 이름입니다.')
+                    print('코인 부족하여 등록에 실패했습니다.')
+                    print('메인화면으로 되돌아갑니다.')
                     module.enter()
                     return False
             else:
-                print('코인 부족하여 등록에 실패했습니다.')
-                print('메인화면으로 되돌아갑니다.')
+                print('이미 존재하는 상품 이름입니다.')
                 module.enter()
                 return False
-                
         else:
             print('원래 화면으로 되돌아갑니다.')
             module.enter()
             return False
 
+    def buy_dlc(self, product):
+        product_name = product['name']
+        product_price = product['price']
+        product_words = product['word_list']
+        product_owner = product['owner']
+        
+        print('[ Dlc 상품 정보 ]')
+        print(f'이름: {product_name}')
+        print(f'가격: {product_price}')
+        print(f'단어 리스트: {product_words}')
+        print(f'제작자: {product_owner}')
+        print()
+        
+        select = module.input_int(1, 2, '구매하려면 1을, 구매를 취소하려면 2를 입력해주세요: ', '잘못된 입력입니다.')
+        if select == 1:
+            if product_price > self.load_coin():
+                print("잔액이 부족합니다.")
+                print("처음으로 돌아갑니다.")
+                return False
+            
+            setting.players.update_one({
+                'name': self.nickname
+            }, {
+                '$push': {
+                    'bought_dlc': product
+                }
+            })
+            self.update_coin(-product_price)
+            print("구매가 완료되었습니다.")
+        else:
+            print("처음으로 돌아갑니다.")
+            return True
 
 
+    # ======================
+    # Game
+    # ====================== 
+    def reveal_word(self, comp_word, used):
+        for i in comp_word:
+            if i not in used:
+                print("_", end = " ")
+            else:
+                print(i, end = " ")
+        return ""
+
+    def print_status(self, comp_word, used, life):
+        print("---------------------------------------------")
+        print(f"Word: ", end = ' ')
+        self.reveal_word(comp_word, used)
+        print()
+        print(f"Used: {' '.join(used)}")
+        print(f"Life: {life}")
+        print("---------------------------------------------")
+
+    def is_word_guessed(self, comp_word, used):
+        tmp = list(comp_word)
+        tmp2 = len(tmp)
+        tmp3 = 0
+        for i in comp_word:
+            if i in used:
+                tmp3 += 1
+        if tmp3 == tmp2:
+            return True
+        else:
+            return False
+        
+    def print_user_list(self):
+        user_list = list(setting.players.find({},{'_id' : 0, 'password' : 0}))
+        module.beautiful_table(user_list, title = 'User List', show_index = True)
+    
     def main(self):
         play_again = None 
         run = True
@@ -478,6 +548,3 @@ class Hackman:
 
 game = Hackman()    
 game.main()
-
-
-
