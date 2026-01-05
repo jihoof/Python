@@ -490,9 +490,16 @@ class Hackman:
                             self.word_list = custom
                     
                     elif select == 'dlc':
-                        print('현재 구매한 dlc 상품들을 출력합니다.')
+                        print('현재 구매한 dlc 상품들을 출력합니다')
+                        user_info = setting.players.find_one({"nickname": self.nickname})
+                        dlc_list = user_info['bought_dlc']
                         
-
+                        module.beautiful_table(dlc_list, title = 'Bought Dlc', show_index = True)
+                        
+                        choice = module.input_int(0, len(dlc_list)-1, "Dlc 상품을 선택하세요: ", "잘못된 입력입니다")
+                        chosen_dlc = dlc_list[choice]
+                        
+                        self.word_list = chosen_dlc['word_list']
                     else:
                         difficulty = setting.levels.find_one({
                             "difficulty" : select
