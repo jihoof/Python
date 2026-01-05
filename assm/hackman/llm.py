@@ -37,3 +37,4 @@ def llm_answer(query):
     return result["choices"][0]["message"]["content"]
 
 
+answer = llm_answer("Make a 5 word list that could be used in hangman game. The diffculty must be extremely very hard. Give your answer in 'word1 word2 word3 ...' form. The words needs to be very long.'")

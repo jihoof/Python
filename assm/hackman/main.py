@@ -152,9 +152,7 @@ class Hackman:
             }                
         })
 
-    def ai_word_list(self):
-        answer = llm.llm_answer("Make a 5 word list that could be used in hangman game. The diffculty must be very hard. Only english word, but it does not to be on every dictionary Give your answer in 'word1 word2 word3 ...' form'")
-        return answer.split()
+
 
      
     # ======================
@@ -277,7 +275,7 @@ class Hackman:
             # custom 유저 한테 업로드 
             # 가격 유저 업로드 가격 비례 코인 지불 가격 2배
             # 다른 구매하면 자기한테 알림오고 수수료 50% 코인(like 대한민국 세금) 지급
-            select = module.input_int(1, 2, 'Dlc 상점에 업로드 현재 커스텀 리스트를 업로드하려면 1을, Dlc 상점을 구경하려면 2를 입력해주세요: ', '잘못된 입력입니다.')
+            select = module.input_int(1, 3, 'Dlc 상점에 현재 커스텀 리스트를 업로드하려면 1을, Dlc 상점을 구경하려면 2를 되돌아가려면 3을 입력해주세요: ', '잘못된 입력입니다.')
             if select == 1:
                 custom_list = self.custom_load()
                 if len(custom_list) == 0:
@@ -289,12 +287,14 @@ class Hackman:
                     if not upload_status:
                         print('Unexpected critical error occured. Error code: -1336')
                         print('도움을 위해선 고객센터에 연락해주시기 바랍니다. 전화번호: 1336')
-            else:
+            elif select == 2:
                 print('현재 구입가능한 Dlc 상점의 상품들을 보여드리겠습니다. ')
                 print('정보 로딩중...')
                 product_list = list(setting.dlc.find({}, {'_id': 0}))
+                import copy
+                show_list = list(setting.dlc.find({}, {'_id': 0, 'owner' : 0, 'word_list' : 0}))
                 print('로딩 완료!')
-                module.beautiful_table(product_list, title = '상품 정보', show_index = True)
+                module.beautiful_table(show_list, title = '상품 정보', show_index = True)
                 select = input('구매할 상품의 이름을 입력해주세요.')
                 
                 product = None
@@ -305,12 +305,18 @@ class Hackman:
                 if not product:
                     print('이름과 일치하는 Dlc 상품이 없습니다.')
                     print('처음으로 돌아갑니다.')
+                    module.enter()
                     continue
                 
                 if not self.buy_dlc(product):
                     print('Unexpected critical error occured. Error code: -133.6')
                     print('도움을 위해선 고객센터에 연락해주시기 바랍니다. 전화번호: 133.6')
+                    module.enter()
                     continue
+            else:
+                print('전 화면으로 되돌아갑니다.')
+                module.enter()
+                break
                 
     def upload_custom(self, custom_list):
         name = input('Dlc에 업로드할 단어리스트의 이름을 입력해주세여: ')
@@ -339,7 +345,7 @@ class Hackman:
         
         print('책정 완료!')
         
-        select = module.input_int(f'책정 결과, 업로드 비용은 {upload_fee}이고 수수료는 30%입니다. 상품은 dlc상점에 등록하겠습니까? 등록하려면 1을 취소하려면 2를 입력하세요: ')
+        select = module.input_int(1, 2, f'책정 결과, 업로드 비용은 {upload_fee}이고 수수료는 30%입니다. 상품은 dlc상점에 등록하겠습니까? 등록하려면 1을 취소하려면 2를 입력하세요: ', '잘못된 입력입니다.')
         if select == 1:
             if not setting.dlc.find_one({'name' : name}):  
                 print('등록비를 약탈합니다.')
@@ -354,6 +360,7 @@ class Hackman:
                     })
                     self.update_coin(-upload_fee)
                     print('상품이 정상적으로 등록되었습니다.')
+                    module.enter()
                     return True
                 else:
                     print('코인 부족하여 등록에 실패했습니다.')
@@ -390,14 +397,17 @@ class Hackman:
                 return False
             
             setting.players.update_one({
-                'name': self.nickname
+                'nickname': self.nickname
             }, {
                 '$push': {
                     'bought_dlc': product
                 }
-            })
+            })      
             self.update_coin(-product_price)
             print("구매가 완료되었습니다.")
+            module.enter()
+            return True
+
         else:
             print("처음으로 돌아갑니다.")
             return True
@@ -466,9 +476,9 @@ class Hackman:
                         
                 if history == False:
                     select = module.input_str(
-                        '플레이하고 싶은 레벨을 선택해주세요(very easy, easy, medium, hard, very hard, hell, custom): ', 
+                        '플레이하고 싶은 레벨을 선택해주세요(very easy, easy, medium, hard, very hard, hell, custom, dlc): ', 
                         '잘못된 입력입니다.', 
-                        ['very easy', 'easy', 'medium', 'hard', 'very hard', 'hell', 'custom']
+                        ['very easy', 'easy', 'medium', 'hard', 'very hard', 'hell', 'custom', 'dlc']
                     )
                     if select == 'custom':
                         custom = self.custom_menu()
@@ -478,6 +488,10 @@ class Hackman:
                             continue 
                         else:
                             self.word_list = custom
+                    
+                    elif select == 'dlc':
+                        print('현재 구매한 dlc 상품들을 출력합니다.')
+                        
 
                     else:
                         difficulty = setting.levels.find_one({
