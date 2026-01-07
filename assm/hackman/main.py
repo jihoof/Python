@@ -11,6 +11,7 @@ class Hackman:
         while True:
             module.clear()
             print('Hang Man game.inc')
+            print('김원혁 바보')
             print("관리자 로그인을 하시려면 '1'을, 로그인 하시려면 '2'를, 계정을 생성하려면 '3'을 입력해주세요.")
             select = module.input_int(1,3,'입력: ','잘못된 입력입니다.')
 
