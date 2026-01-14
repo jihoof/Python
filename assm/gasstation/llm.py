@@ -9,7 +9,9 @@ def llm_answer(query):
         "Authorization": f"Bearer {os.getenv('TOKEN')}",
         "Content-Type": "application/json",
     }
-    model_resp = requests.get(os.getenv('URL'), headers=headers, timeout=10)
+
+
+    model_resp = requests.get(os.getenv('URL') + '/models',  headers=headers, timeout=10)
 
     model_data = model_resp.json().get("data", [])
     if not model_data:
@@ -38,3 +40,4 @@ def llm_answer(query):
 
 
 answer = llm_answer("Make a 5 word list that could be used in hangman game. The diffculty must be extremely very hard. Give your answer in 'word1 word2 word3 ...' form. The words needs to be very long.'")
+print(answer)

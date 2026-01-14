@@ -10,7 +10,7 @@ class Npc:
         if setting.npc.count_documents() < 0:
             data = self.add_npc()
         else:
-            if module.chance(70):
+            if module.chance(60):
                 data = self.add_npc()
             else:
                 data = random.choice(list(setting.npc.find()))
@@ -59,3 +59,7 @@ class Npc:
             }
             self.talk_history.append(history)
             self.update_npc()
+
+
+test = Npc()
+test.chatbot()
