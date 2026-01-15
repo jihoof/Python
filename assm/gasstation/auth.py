@@ -3,10 +3,11 @@ import setting
 import getpass
 import hashlib
 import os
+import llm
 
 def sign_up():
     while True:
-        nickname = input('아이디를 입력하세요: ')
+        nickname = input('플레이어 아이디를 입력하세요(변경 불가): ')
         if setting.players.find_one({'nickname' : nickname }):
             print('이미 존재하는 아이디 입니다.')
             continue
@@ -24,16 +25,23 @@ def sign_up():
     encrypted_password = hash_password(password, salt)
 
     setting.players.insert_one({
-        'nickname' : nickname,
+        'id' : nickname,
         'password' :  encrypted_password, 
         'salt': salt,
+        'items': [],
+        'bought_upgrades': [],
+        'money': 0,
+        'diesel': 0,
+        'gasoline': 0,
+        'cars': [],
+        'auction_house_membership_level': 0
     })
     print('정상적으로 계정이 생성되었습니다.')
     module.enter()
 
 def sign_in():
     while True:
-        nickname = input('닉네임을 입력하세요: ')
+        nickname = input('플레이어 id를 입력하세요: ')
         password = getpass.getpass('비밀번호를 입력하세요: ')
 
         info = setting.players.find_one({"nickname" : nickname})
