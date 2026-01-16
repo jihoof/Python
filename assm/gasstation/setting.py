@@ -4,3 +4,4 @@ client = DB_module.client
 db = client['jihoo']
 players = db['gasstation-players']
 npc = db['gasstation-npc']
+price = db['gasstation-gas_price']

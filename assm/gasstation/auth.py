@@ -44,10 +44,10 @@ def sign_in():
         nickname = input('플레이어 id를 입력하세요: ')
         password = getpass.getpass('비밀번호를 입력하세요: ')
 
-        info = setting.players.find_one({"nickname" : nickname})
+        info = setting.players.find_one({"id" : nickname})
         if not info:
             print("유저가 존재하지 않습니다")
-            continue
+            break
             
         salt = info['salt']
         encrypted_password = hash_password(password, salt)
@@ -57,9 +57,8 @@ def sign_in():
             continue
         
         print("로그인 되었습니다")
-        return info
+        return info, True
     
 def hash_password(password, salt):
     return hashlib.sha256(salt + password.encode()).hexdigest()
 
-sign_in()

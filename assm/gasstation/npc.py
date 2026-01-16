@@ -7,7 +7,7 @@ import module
 
 class Npc:
     def __init__(self):
-        if setting.npc.count_documents() < 0:
+        if setting.npc.count_documents({}) < 0:
             data = self.add_npc()
         else:
             if module.chance(60):
