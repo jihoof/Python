@@ -26,7 +26,12 @@ class GasStation:
             if select == 0:
                 pass
             elif select == 1:
-                pass
+                while True:
+                    diesel_price = round(self.load_price['diesel'], 2)
+                    gasoline_price = round(self.load_price['gasoline'], 2)
+                    electric_price = round(self.load_price['electric'], 2)
+                    print('기름 상점에 오신걸 환영합니다.')
+                    print('구매를 희망하는 종류의 ')
 
     def menu(self):
         module.enter()
@@ -70,7 +75,13 @@ class GasStation:
         self.gasoline = setting.players.find_one({
                 'id': self.id
             }, {'gasoline': 1, '_id': 0})
-        
+    
+    def load_price(self):
+        price = setting.price.find_one({
+                'price': {'$exsits': True}
+            }, {'price':1, '_id': 0}) 
+        return price
+
     # others
     def wait_for_a_vehicle(self):
         pass
