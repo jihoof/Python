@@ -143,20 +143,35 @@ class GasStation:
                     next = self.auction_house_membership - 1
                     print(f'현재 회원 등급: {self.auction_house_membership}')
                     print(f'다음 등급: {next}')
-                    if next == 4:
-                        price = 1500000
-                        print('멤버쉽 4등급 가격은 150만 달러입니다.')
+                    price = {
+                        4:15000000,
+                        3:50000000,
+                        2:150000000,
+                        1:500000000,
+                        0:1000000000
+                        }
+                    print(F'멤버쉽 {next}등급 가격은 {price[next]}만 달러입니다.')
                     select = module.input_int(1,2, """
 1. 구매
 2. 취소
 """, "잘못된 입력입니다.")
                     if select == 1:
-                        self.money -= 1500000
-                        #TODO db 업뎃
+                        self.money -= price
+                        self.decrease_money(price)
+                        module.enter()
+                    else:
+                        module.enter()
+                        continue
 
         else:
             print('경호실장: 진입 불가하십니다.')
             return
+
+    def increase_money(self, amount):
+        setting.players.update_one({'id': self.id}, {"$inc": {'money': amount}})
+
+    def decrease_money(self, amount):
+        setting.players.update_one({'id': self.id}, {"$ind": {'money': -amount}})
 
     def open_inventory(self):
         pass
