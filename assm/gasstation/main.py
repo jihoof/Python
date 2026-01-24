@@ -64,22 +64,22 @@ class GasStation:
     def load_money(self):
         self.money = setting.players.find_one({
                 'id': self.id
-            }, {'money': 1, '_id': 0})
+            }, {'money': 1, '_id': 0})['money']
 
     def load_diesel(self):
         self.diesel = setting.players.find_one({
                 'id': self.id
-            }, {'diesel': 1, '_id': 0})   
+            }, {'diesel': 1, '_id': 0})['diesel']
         
     def load_gasoline(self):
         self.gasoline = setting.players.find_one({
                 'id': self.id
-            }, {'gasoline': 1, '_id': 0})
+            }, {'gasoline': 1, '_id': 0})['gasoline']
     
     def load_price(self):
         price = setting.price.find_one({
                 'price': {'$exsits': True}
-            }, {'price':1, '_id': 0}) 
+            }, {'price':1, '_id': 0})
         return price
 
     # others
@@ -93,13 +93,19 @@ class GasStation:
         pass
 
     def go_to_the_next_day(self):
-        pass
+        setting.players.update_one({
+            'id': self.id
+        }, {'$inc': {'day': 1}})
+        self.day = setting.players.find_one({'id': self.id}, {'day':1, '_id': 0})['day']
+        print('다음날로 넘어갑니다.')
+        print(f'현재 일차: {self.day}')
+        module.enter()
 
     def go_to_shop(self):
         pass
 
     def auction_house(self):
-        pass
+        pass 
 
     def open_inventory(self):
         pass
@@ -107,5 +113,8 @@ class GasStation:
     def save_and_quit(self):
         pass
 
+    def credit(self):
+        pass
+
 player = GasStation()
-player.menu()-
+player.menu()
