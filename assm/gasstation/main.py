@@ -69,8 +69,8 @@ class GasStation:
     def load_diesel(self):
         self.diesel = setting.players.find_one({
                 'id': self.id
-            }, {'diesel': 1, '_id': 0})
-
+            }, {'diesel': 1, '_id': 0})   
+        
     def load_gasoline(self):
         self.gasoline = setting.players.find_one({
                 'id': self.id
@@ -108,4 +108,4 @@ class GasStation:
         pass
 
 player = GasStation()
-player.menu()
+player.menu()-
