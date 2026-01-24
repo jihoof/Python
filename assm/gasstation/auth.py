@@ -34,7 +34,7 @@ def sign_up():
         'diesel': 0,
         'gasoline': 0,
         'cars': [],
-        'auction_house_membership_level': 0,
+        'auction_house_membership_level': 5,
         'day': 0
     })
     print('정상적으로 계정이 생성되었습니다.')
