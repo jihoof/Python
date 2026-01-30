@@ -33,8 +33,10 @@ class GasStation:
                     electric_price = round(self.load_price['electric'], 2)
                     print('기름 상점에 오신걸 환영합니다.')
                     print('구매를 희망하는 종류의 ')
+                    
             elif select == 2:
-                pass
+                self.show_current_status()
+
             elif select == 3:
                 self.go_to_the_next_day()
 
@@ -86,7 +88,24 @@ class GasStation:
                 'price': {'$exsits': True}
             }, {'price':1, '_id': 0})
         return price
+    
+    def load_items(self):
+        pass
+ 
+    def load_day(self):
+        self.day = setting.players.find_one({
+            'id': self.id
+            }, {'day': 1, '_id': 0})['day']
+    
+    def load_rating(self):
+        self.rating = setting.players.find_one({
+            'id': self.id
+            }, {'rate': 1, '_id': 0})['rate']
 
+    def load_handled_customers(self):
+        self.handled_customers = setting.players.find_one({
+            'id': self.id
+            }, {'handled_customers': 1, '_id': 0})['handled_customers']
     # others
     def wait_for_a_vehicle(self):
         pass
@@ -95,7 +114,21 @@ class GasStation:
         pass
 
     def show_current_status(self):
-        pass
+        self.load_day()
+        self.load_money()
+        self.load_diesel()
+        self.load_gasoline()
+        self.load_rating()
+        self.load_handled_customers()
+        print('-'*8+'STATUS'+'-'*8)
+        print(f'Day: {self.day}')
+        print(f'Rating: {self.rating}')
+        print(f'Money: {self.money}')
+        print(f'Total Customers Handled: {self.handled_customers}')
+        print(f'Left Diesel: {self.diesel}')
+        print(f'Left Gasoline: {self.gasoline}')
+        print('-'*22)
+        module.enter()
 
     def go_to_the_next_day(self):
         setting.players.update_one({
@@ -134,9 +167,13 @@ class GasStation:
 4. 멤버쉽 구매
 """, '잘못된 입력입니다.')
                 if select == 1:
+                    print('경매장을 ')
                     break
                 elif select == 2:
-                    pass
+                    print('현재 보유중인 모든 아이템, 기름, 차량을 출력합니다.')
+                    self.load_diesel()
+                    self.load_gasoline()
+
                 elif select == 3:
                     pass
                 else:
@@ -171,7 +208,7 @@ class GasStation:
         setting.players.update_one({'id': self.id}, {"$inc": {'money': amount}})
 
     def decrease_money(self, amount):
-        setting.players.update_one({'id': self.id}, {"$ind": {'money': -amount}})
+        setting.players.update_one({'id': self.id}, {"$inc": {'money': -amount}})
 
     def open_inventory(self):
         pass

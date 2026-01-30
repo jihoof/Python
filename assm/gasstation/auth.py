@@ -8,7 +8,7 @@ import llm
 def sign_up():
     while True:
         nickname = input('플레이어 아이디를 입력하세요(변경 불가): ')
-        if setting.players.find_one({'nickname' : nickname }):
+        if setting.players.find_one({'id' : nickname }):
             print('이미 존재하는 아이디 입니다.')
             continue
         
@@ -30,12 +30,14 @@ def sign_up():
         'salt': salt,
         'items': [],
         'bought_upgrades': [],
-        'money': 0,
+        'money': 100,
         'diesel': 0,
         'gasoline': 0,
         'cars': [],
         'auction_house_membership_level': 5,
-        'day': 0
+        'day': 0,
+        'rate': 0,
+        'handled_customers': 0
     })
     print('정상적으로 계정이 생성되었습니다.')
     module.enter()
