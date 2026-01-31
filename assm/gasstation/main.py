@@ -4,6 +4,7 @@ import setting
 import auth
 from time import sleep
 
+
 class GasStation:
     def __init__(self):
         pass
@@ -33,7 +34,7 @@ class GasStation:
                     electric_price = round(self.load_price['electric'], 2)
                     print('기름 상점에 오신걸 환영합니다.')
                     print('구매를 희망하는 종류의 ')
-                    
+                      
             elif select == 2:
                 self.show_current_status()
 
@@ -106,6 +107,7 @@ class GasStation:
         self.handled_customers = setting.players.find_one({
             'id': self.id
             }, {'handled_customers': 1, '_id': 0})['handled_customers']
+        
     # others
     def wait_for_a_vehicle(self):
         pass
@@ -131,17 +133,46 @@ class GasStation:
         module.enter()
 
     def go_to_the_next_day(self):
-        setting.players.update_one({
-            'id': self.id
-        }, {'$inc': {'day': 1}})
-        self.day = setting.players.find_one({'id': self.id}, {'day':1, '_id': 0})['day']
-        print('다음날로 넘어갑니다.')
-        print(f'현재 일차: {self.day}')
+        self.load_day()
+        self.load_money()
+        next_money = 100*(1.25 ** (self.day+1))
+        print(f'다음날로 넘어가기 위한 조건: {next_money} 달러 필요.')
+        sleep(1)
         module.enter()
-        #TODO 조건 추가
+        if self.money >= next_money:
+            self.decrease_money(next_money)
+            setting.players.update_one({
+                'id':self.id
+            }, {'$inc': {'multiplier': 0.1}})
+            setting.players.update_one({
+                'id': self.id
+            }, {'$inc': {'day': 1}})
+            self.day = setting.players.find_one({'id': self.id}, {'day':1, '_id': 0})['day']
+            print('다음날로 넘어갑니다.')
+            print(f'현재 일차: {self.day}')
+            module.enter()
+        else:
+            print('조건을 만족하지 않았습니다.')
+            module.enter()
+            return None
+        
 
     def go_to_shop(self):
-        pass
+        print('사상 최대 규모의 암시장, 블랙마켓에 오신걸 환영합니다.')
+        select = module.input_int(1,3,"""
+1. 상품 보기
+2. 블랙마켓 지분 인수하기
+3. 블랙마켓 나가기
+입력: 
+""", "잘못된 입력입니다.")
+        if select == 1:
+            print('구매 가능한 모든 상품의 중류을 출력합니다.')
+        elif select == 2:
+            pass
+        else:
+            print('주유소로 복귀합니다.')
+            module.enter()
+            return None
 
     def auction_house(self):
         if self.money >= 1000000:
