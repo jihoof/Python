@@ -1,6 +1,4 @@
-import DB_module
-import module
-import setting
+from libs.module import clear
 import random
 import llm
 
@@ -27,7 +25,7 @@ class Car():
             
 
     def print_info(self):
-        module.clear()
+        clear()
         self.make_json()
         answer = llm.llm_answer(f"""
             <<Vehicle Info>>

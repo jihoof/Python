@@ -1,11 +1,9 @@
-import random
 import time
-import setting
+from db import price
 
 while True:
     change_time = 3600
-
-    setting.price.update_one({
+    price.update_one({
         'product': {'$exists': True}, 
     })
     time.sleep(change_time)

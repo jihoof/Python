@@ -51,6 +51,14 @@ print('로딩 완료!')
 time.sleep(0.15)
 
 
+db = client['jihoo']
+players = db['gasstation-players']
+npc = db['gasstation-npc']
+price = db['gasstation-gas_price']
+auction = db['gasstation-auction_house']
+blackmarket = db['gasstation-blackmarket']
+
+
 def clean_doc(listt):
     return [{key: value for key, value in doc.items() if key != "_id"} for doc in listt]
 

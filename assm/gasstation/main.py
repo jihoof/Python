@@ -1,7 +1,7 @@
-import DB_module
-import module
-import setting
-import auth
+from libs.module import input_int, enter, clear, shut_down
+from libs.auth import sign_up
+from db import players
+from db.transaction import load_money, load_diesel, load_gasoline, load_day, load_rating, load_handled_customers, decrease_money
 from time import sleep
 
 
@@ -23,8 +23,8 @@ class GasStation:
             print('7. Open inventory') # 인벤토리
             print('8. Go a drive') # 상점에서 차량 구매후 이용 가능
             print('9. Save and quit')
-            select = module.input_int(0, 9, '입력: ', '잘못된 입력입니다.') 
-            module.enter()
+            select = input_int(0, 9, '입력: ', '잘못된 입력입니다.') 
+            enter()
             if select == 0:
                 pass
             elif select == 1:
@@ -42,72 +42,34 @@ class GasStation:
                 self.go_to_the_next_day()
 
     def menu(self):
-        module.enter()
-        module.clear()
+        enter()
+        clear()
         while True:
             print('뇌절 주유소에 오신걸 환영합니다.')
-            select = module.input_int(1, 4,"""
+            select = input_int(1, 4,"""
 1. 로그인
 2. 계정 생성
 3. 크레딧
 4. 게임 종료
 입력: """, '잘못된 입력입니다.')
-            module.enter()
+            enter()
             if select == 1:
-                sign_in = auth.sign_in()
-                module.enter()
-                module.clear()
+                sign_in = sign_in()
+                enter()
+                clear()
                 if sign_in[1]:
                     self.id = sign_in[0]["id"]
                     break
             elif select == 2:
-                auth.sign_up()
-                module.enter()
-                module.clear()
+                sign_up()
+                enter()
+                clear()
             elif select == 3:
                 pass
             else:
-                module.shut_down()
+                shut_down()
     # load
-    def load_money(self):
-        self.money = setting.players.find_one({
-                'id': self.id
-            }, {'money': 1, '_id': 0})['money']
 
-    def load_diesel(self):
-        self.diesel = setting.players.find_one({
-                'id': self.id
-            }, {'diesel': 1, '_id': 0})['diesel']
-        
-    def load_gasoline(self):
-        self.gasoline = setting.players.find_one({
-                'id': self.id
-            }, {'gasoline': 1, '_id': 0})['gasoline']
-    
-    def load_price(self):
-        price = setting.price.find_one({
-                'price': {'$exsits': True}
-            }, {'price':1, '_id': 0})
-        return price
-    
-    def load_items(self):
-        pass
- 
-    def load_day(self):
-        self.day = setting.players.find_one({
-            'id': self.id
-            }, {'day': 1, '_id': 0})['day']
-    
-    def load_rating(self):
-        self.rating = setting.players.find_one({
-            'id': self.id
-            }, {'rate': 1, '_id': 0})['rate']
-
-    def load_handled_customers(self):
-        self.handled_customers = setting.players.find_one({
-            'id': self.id
-            }, {'handled_customers': 1, '_id': 0})['handled_customers']
-        
     # others
     def wait_for_a_vehicle(self):
         pass
@@ -116,12 +78,12 @@ class GasStation:
         pass
 
     def show_current_status(self):
-        self.load_day()
-        self.load_money()
-        self.load_diesel()
-        self.load_gasoline()
-        self.load_rating()
-        self.load_handled_customers()
+        self.day = load_day(self.id)
+        self.money = load_money(self.id)
+        self.diesel = load_diesel(self.id)
+        self.gasoline = load_gasoline(self.id)
+        self.rating = load_rating(self.id)
+        self.handled_customers = load_handled_customers(self.id)
         print('-'*8+'STATUS'+'-'*8)
         print(f'Day: {self.day}')
         print(f'Rating: {self.rating}')
@@ -130,36 +92,36 @@ class GasStation:
         print(f'Left Diesel: {self.diesel}')
         print(f'Left Gasoline: {self.gasoline}')
         print('-'*22)
-        module.enter()
+        enter()
 
     def go_to_the_next_day(self):
-        self.load_day()
-        self.load_money()
+        self.day = load_day(self.id)
+        self.money = load_money(self.id)
         next_money = 100*(1.25 ** (self.day+1))
         print(f'다음날로 넘어가기 위한 조건: {next_money} 달러 필요.')
         sleep(1)
-        module.enter()
+        enter()
         if self.money >= next_money:
-            self.decrease_money(next_money)
-            setting.players.update_one({
+            decrease_money(self.id, next_money)
+            players.update_one({
                 'id':self.id
             }, {'$inc': {'multiplier': 0.1}})
-            setting.players.update_one({
+            players.update_one({
                 'id': self.id
             }, {'$inc': {'day': 1}})
-            self.day = setting.players.find_one({'id': self.id}, {'day':1, '_id': 0})['day']
+            self.day = load_day(self.id)
             print('다음날로 넘어갑니다.')
             print(f'현재 일차: {self.day}')
-            module.enter()
+            enter()
         else:
             print('조건을 만족하지 않았습니다.')
-            module.enter()
+            enter()
             return None
         
 
     def go_to_shop(self):
         print('사상 최대 규모의 암시장, 블랙마켓에 오신걸 환영합니다.')
-        select = module.input_int(1,3,"""
+        select = input_int(1,3,"""
 1. 상품 보기
 2. 블랙마켓 지분 인수하기
 3. 블랙마켓 나가기
@@ -171,14 +133,14 @@ class GasStation:
             pass
         else:
             print('주유소로 복귀합니다.')
-            module.enter()
+            enter()
             return None
 
     def auction_house(self):
         if self.money >= 1000000:
             print('경매장에 오신걸 환영합니다.')
             print('회원님의 정보를 동기화 중입니다.')
-            self.auction_house_membership = setting.players.find_one({
+            self.auction_house_membership = players.find_one({
                 'id': self.id
             }, {'auction_house_membership_level': 1, '_id':0})['auction_house_membership_level']
             print(f'회원 이름: {self.id}, 회원 등급: {self.auction_house_membership}등급')
@@ -189,9 +151,9 @@ class GasStation:
                 print('환영합니다, VVIP님.')
             else:
                 print('환영합니다.')
-            module.enter()
+            enter()
             while True:
-                select = module.input_int(1, 4,"""
+                select = input_int(1, 4,"""
 1. 경매장 나가기
 2. 상품 등록
 3. 상품 구매
@@ -219,27 +181,23 @@ class GasStation:
                         0:1000000000
                         }
                     print(F'멤버쉽 {next}등급 가격은 {price[next]}만 달러입니다.')
-                    select = module.input_int(1,2, """
+                    select = input_int(1,2, """
 1. 구매
 2. 취소
 """, "잘못된 입력입니다.")
                     if select == 1:
-                        self.money -= price
-                        self.decrease_money(price)
-                        module.enter()
+                        self.money -= price[next]
+                        decrease_money(self.id, price[next])
+                        enter()
                     else:
-                        module.enter()
+                        enter()
                         continue
 
         else:
             print('경호실장: 진입 불가하십니다.')
             return
 
-    def increase_money(self, amount):
-        setting.players.update_one({'id': self.id}, {"$inc": {'money': amount}})
 
-    def decrease_money(self, amount):
-        setting.players.update_one({'id': self.id}, {"$inc": {'money': -amount}})
 
     def open_inventory(self):
         pass

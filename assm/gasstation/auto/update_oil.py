@@ -1,10 +1,10 @@
 import random
 import time
-import setting
+from db import price
 
 while True:
     change_time = random.randint(2000000, 3000000)
-    setting.price.update_one({
+    price.update_one({
         'cnt': {"$exists": True}
    }, {
        '$set': {

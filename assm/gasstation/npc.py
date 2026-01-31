@@ -1,19 +1,18 @@
 import random
-import math
 import llm
-import setting
+import repo.jihoo.assm.gasstation.config as config
 import uuid
-import module
+import repo.jihoo.assm.gasstation.libs.module as module
 
 class Npc:
     def __init__(self):
-        if setting.npc.count_documents({}) < 0:
+        if config.npc.count_documents({}) < 0:
             data = self.add_npc()
         else:
             if module.chance(60):
                 data = self.add_npc()
             else:
-                data = random.choice(list(setting.npc.find()))
+                data = random.choice(list(config.npc.find()))
         
         self.id           = data['id']
         self.name         = data['name']
@@ -29,7 +28,7 @@ class Npc:
             'likeability' : 0, #ai한테 대화 바탕 호감도 측정
             'visit_cnt' : 0
         }
-        setting.npc.insert_one(data)
+        config.npc.insert_one(data)
         return data
     
     def update_npc(self):
@@ -40,7 +39,7 @@ class Npc:
             'likeability': self.likeablity,
             'visit_cnt': self.visit_cnt
         }
-        setting.npc.update_one({
+        config.npc.update_one({
             'id': self.id
         }, {
             '$set': data
