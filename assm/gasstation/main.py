@@ -1,7 +1,7 @@
-from libs.module import input_int, enter, clear, shut_down
-from libs.auth import sign_up
-from db import players
-from db.transaction import load_money, load_diesel, load_gasoline, load_day, load_rating, load_handled_customers, decrease_money
+from .libs.module import input_int, enter, clear, shut_down, input_str
+from .libs.auth import sign_up, sign_in
+from .db import players, auction
+from .db.transaction import load_money, load_diesel, load_gasoline, load_day, load_rating, load_handled_customers, decrease_money, load_items
 from time import sleep
 
 
@@ -41,6 +41,12 @@ class GasStation:
             elif select == 3:
                 self.go_to_the_next_day()
 
+            elif select == 4:
+                pass
+
+            elif select == 5:
+                self.auction_house()
+
     def menu(self):
         enter()
         clear()
@@ -54,11 +60,11 @@ class GasStation:
 입력: """, '잘못된 입력입니다.')
             enter()
             if select == 1:
-                sign_in = sign_in()
+                sign_in_ = sign_in()
                 enter()
                 clear()
-                if sign_in[1]:
-                    self.id = sign_in[0]["id"]
+                if sign_in_[1]:
+                    self.id = sign_in_[0]["id"]
                     break
             elif select == 2:
                 sign_up()
@@ -137,8 +143,9 @@ class GasStation:
             return None
 
     def auction_house(self):
+        self.money = load_money(self.id)
         if self.money >= 1000000:
-            print('경매장에 오신걸 환영합니다.')
+            print('사상 최대 규묘의 경매장 The Black Tear에 오신걸 환영합니다.')
             print('회원님의 정보를 동기화 중입니다.')
             self.auction_house_membership = players.find_one({
                 'id': self.id
@@ -160,12 +167,37 @@ class GasStation:
 4. 멤버쉽 구매
 """, '잘못된 입력입니다.')
                 if select == 1:
-                    print('경매장을 ')
+                    print('경매장을 나갑니다.')
                     break
                 elif select == 2:
                     print('현재 보유중인 모든 아이템, 기름, 차량을 출력합니다.')
-                    self.load_diesel()
-                    self.load_gasoline()
+                    diesel = load_diesel(id)
+                    gasoline = load_gasoline(id)
+                    items = load_items(id)    
+                    print(f"""
+현재 보유 중인 디젤: {diesel}
+현재 보유 중인 가솔린: {gasoline}
+""")
+                    for item in items:
+                        print(f"아이템: {item['name']}, 보유 개수: {item['cnt']}")
+                    select = input_str('입력: ', '잘못된 입력입니다.', ['가솔린', '디젤'] + [key['name'] for key in load_items()])
+                    select2 = input_int(10000, 9**99, '상품의 가격을 입력하세요: ', '최소가격 미달 또는 상한 초과.')
+                    select3 = input('상품 설명을 입력하세요.')
+                    try:
+                        auction.insert_one({
+                            'name': select,
+                            'price': select2,
+                            'product_introduce': select3,
+                            'proposal': []
+                        })
+                    except:
+                        print('Unexpected fatal error occured. error code: -1')
+                        sleep(2)
+                        print('Rebooting faliure')
+                        print('시스템을 강제 종료합니다.')
+                        sleep(2)
+                        shut_down()
+
 
                 elif select == 3:
                     pass
@@ -195,6 +227,7 @@ class GasStation:
 
         else:
             print('경호실장: 진입 불가하십니다.')
+            enter()
             return
 
 

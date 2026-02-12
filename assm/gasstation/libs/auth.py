@@ -1,5 +1,6 @@
-import repo.jihoo.assm.gasstation.libs.module as module
-import repo.jihoo.assm.gasstation.config as config
+import assm.gasstation.libs.module as module
+import assm.gasstation.config as config
+from assm.gasstation.db import players
 import getpass
 import hashlib
 import os
@@ -7,7 +8,7 @@ import os
 def sign_up():
     while True:
         nickname = input('플레이어 아이디를 입력하세요(변경 불가): ')
-        if config.players.find_one({'id' : nickname }):
+        if players.find_one({'id' : nickname }):
             print('이미 존재하는 아이디 입니다.')
             continue
         
@@ -23,7 +24,7 @@ def sign_up():
     salt = os.urandom(16)
     encrypted_password = hash_password(password, salt)
 
-    config.players.insert_one({
+    players.insert_one({
         'id' : nickname,
         'password' :  encrypted_password, 
         'salt': salt,
@@ -47,7 +48,7 @@ def sign_in():
         nickname = input('플레이어 id를 입력하세요: ')
         password = getpass.getpass('비밀번호를 입력하세요: ')
 
-        info = config.players.find_one({"id" : nickname})
+        info = players.find_one({"id" : nickname})
         if not info:
             print("유저가 존재하지 않습니다")
             break

@@ -1,4 +1,4 @@
-from db import players, price
+from assm.gasstation.db import players, price
 
 # ------ Load ------
 def load_money(id):
@@ -21,8 +21,10 @@ def load_price():
             'price': {'$exists': True}
         }, {'price':1, '_id': 0})
 
-def load_items():
-    pass
+def load_items(id):
+    return players.find_one({
+        'id': id
+    }, {'items': 1, '_id': 0})
 
 def load_day(id):
     return players.find_one({
