@@ -1,6 +1,6 @@
 from libs.module import clear
 import random
-import llm
+import libs.llm
 
 class Car():
     def __init__(self, fuel_type, vehicle_type, capacity, unit):
