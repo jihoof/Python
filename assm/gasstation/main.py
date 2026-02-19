@@ -139,7 +139,9 @@ class GasStation:
             beautiful_table(load_blackmarket_product(), title='상품 목록')
             select = input_str('구매 하고 싶은 물건의 이름을 적어주세요.\n입력: ', '존재하지 않는 품목입니다. ', [n['name'] for n in load_blackmarket_product()])
             enter()
-            if load_money() > dict(load_blackmarket_product()):
+            products_dict = {n['name']: n for n in load_blackmarket_product()}
+            if load_money() > products_dict[select]['price']:
+                pass
 
 
         elif select == 2:
