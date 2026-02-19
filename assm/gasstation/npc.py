@@ -1,15 +1,15 @@
 import random
 import llm
-import repo.jihoo.assm.gasstation.config as config
+import config
 import uuid
-import repo.jihoo.assm.gasstation.libs.module as module
+from libs.module import chance
 
 class Npc:
     def __init__(self):
         if config.npc.count_documents({}) < 0:
             data = self.add_npc()
         else:
-            if module.chance(60):
+            if chance(60):
                 data = self.add_npc()
             else:
                 data = random.choice(list(config.npc.find()))

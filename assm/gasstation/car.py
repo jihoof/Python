@@ -1,6 +1,6 @@
 from libs.module import clear
+from libs.llm import llm_answer
 import random
-import libs.llm
 
 class Car():
     def __init__(self, fuel_type, vehicle_type, capacity, unit):
@@ -27,7 +27,7 @@ class Car():
     def print_info(self):
         clear()
         self.make_json()
-        answer = llm.llm_answer(f"""
+        answer = llm_answer(f"""
             <<Vehicle Info>>
             {self.car_info}
 
@@ -70,11 +70,11 @@ class Car():
 # 차량 종류
 class Gasoline_Car(Car):
     def __init__(self, vehicle_type, capacity, unit):
-        super.__init__("Gasoline", vehicle_type, capacity, unit)
+        super().__init__("Gasoline", vehicle_type, capacity, unit)
 
 class Diesel_Car(Car):
     def __init__(self, vehicle_type, capacity, unit):
-        super.__init__("Diesel", vehicle_type, capacity, unit)
+        super().__init__("Diesel", vehicle_type, capacity, unit)
 
 class Electric_Car(Car):
     def __init__(self,vehicle_type, capacity, unit):

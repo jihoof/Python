@@ -50,15 +50,12 @@ class GasStation:
     def menu(self):
         enter()
         clear()
+        
         while True:
             print('뇌절 주유소에 오신걸 환영합니다.')
-            select = input_int(1, 4,"""
-1. 로그인
-2. 계정 생성
-3. 크레딧
-4. 게임 종료
-입력: """, '잘못된 입력입니다.')
+            select = input_int(1, 4, "1. 로그인\n2. 계정 생성\n3. 크레딧\n4. 게임 종료\n입력: ", '잘못된 입력입니다.')
             enter()
+            
             if select == 1:
                 sign_in_ = sign_in()
                 enter()
@@ -66,12 +63,15 @@ class GasStation:
                 if sign_in_[1]:
                     self.id = sign_in_[0]["id"]
                     break
+                
             elif select == 2:
                 sign_up()
                 enter()
                 clear()
+                
             elif select == 3:
                 pass
+            
             else:
                 shut_down()
     # load
@@ -90,6 +90,7 @@ class GasStation:
         self.gasoline = load_gasoline(self.id)
         self.rating = load_rating(self.id)
         self.handled_customers = load_handled_customers(self.id)
+        
         print('-'*8+'STATUS'+'-'*8)
         print(f'Day: {self.day}')
         print(f'Rating: {self.rating}')
@@ -143,44 +144,42 @@ class GasStation:
             return None
 
     def auction_house(self):
-        self.money = load_money(self.id)
-        if self.money >= 1000000:
-            print('사상 최대 규묘의 경매장 The Black Tear에 오신걸 환영합니다.')
-            print('회원님의 정보를 동기화 중입니다.')
-            self.auction_house_membership = players.find_one({
+        money = load_money(self.id)
+        if money >= 1000000:
+            print('\n사상 최대 규묘의 경매장 The Black Tear에 오신걸 환영합니다.\n회원님의 정보를 동기화 중입니다.')
+            
+            auction_house_membership = players.find_one({
                 'id': self.id
             }, {'auction_house_membership_level': 1, '_id':0})['auction_house_membership_level']
-            print(f'회원 이름: {self.id}, 회원 등급: {self.auction_house_membership}등급')
-            print('동기화 완료! ')
-            if self.auction_house_membership == 1:
-                print('환영합니다, VIP님.')
-            elif self.auction_house_membership == 0:
-                print('환영합니다, VVIP님.')
-            else:
-                print('환영합니다.')
+
+            call_name = {
+                0:'VVIP',
+                1:'VIP',
+            }
+            print(f'\n회원 이름: {self.id}, 회원 등급: {auction_house_membership}등급')
+            print(f"환영합니다, {call_name.get(auction_house_membership, '일반회원')}님.\n")
+            
             enter()
             while True:
-                select = input_int(1, 4,"""
-1. 경매장 나가기
-2. 상품 등록
-3. 상품 구매
-4. 멤버쉽 구매
-""", '잘못된 입력입니다.')
+                select = input_int(1, 4,"1. 경매장 나가기\n2. 상품 등록\n3. 상품 구매 \n4. 멤버쉽 구매", '잘못된 입력입니다.')
+                
                 if select == 1:
-                    print('경매장을 나갑니다.')
+                    print('\n경매장을 나갑니다.')
                     break
+                
                 elif select == 2:
-                    print('현재 보유중인 모든 아이템, 기름, 차량을 출력합니다.')
-                    diesel = load_diesel(id)
-                    gasoline = load_gasoline(id)
-                    items = load_items(id)    
-                    print(f"""
-현재 보유 중인 디젤: {diesel}
-현재 보유 중인 가솔린: {gasoline}
-""")
+                    print('\n현재 보유중인 모든 아이템, 기름, 차량을 출력합니다.')
+                    diesel = load_diesel(self.id)   
+                    gasoline = load_gasoline(self.id)
+                    items = load_items(self.id)    
+                    
+                    print("-"*8 + "INVENTORY" + "-"*8)
+                    print(f"현재 보유 중인 디젤: {diesel}\n현재 보유 중인 가솔린: {gasoline}\n")
                     for item in items:
                         print(f"아이템: {item['name']}, 보유 개수: {item['cnt']}")
-                    select = input_str('입력: ', '잘못된 입력입니다.', ['가솔린', '디젤'] + [key['name'] for key in load_items()])
+                    print("-"*22)
+                    
+                    select = input_str('입력: ', '잘못된 입력입니다.', ['가솔린', '디젤'] + [key['name'] for key in load_items(self.id)])
                     select2 = input_int(10000, 9**99, '상품의 가격을 입력하세요: ', '최소가격 미달 또는 상한 초과.')
                     select3 = input('상품 설명을 입력하세요.')
                     try:
@@ -198,27 +197,22 @@ class GasStation:
                         sleep(2)
                         shut_down()
 
-
                 elif select == 3:
                     pass
                 else:
-                    next = self.auction_house_membership - 1
-                    print(f'현재 회원 등급: {self.auction_house_membership}')
-                    print(f'다음 등급: {next}')
+                    next = auction_house_membership - 1
+                    print(f'현재 회원 등급: {auction_house_membership}, 다음 등급: {next}')
                     price = {
-                        4:15000000,
-                        3:50000000,
-                        2:150000000,
-                        1:500000000,
-                        0:1000000000
-                        }
+                        4: 15000000,
+                        3: 50000000,
+                        2: 150000000,
+                        1: 500000000,
+                        0: 1000000000
+                    }
                     print(F'멤버쉽 {next}등급 가격은 {price[next]}만 달러입니다.')
-                    select = input_int(1,2, """
-1. 구매
-2. 취소
-""", "잘못된 입력입니다.")
+                    select = input_int(1,2, "1. 구매\n2. 취소", "잘못된 입력입니다.")
                     if select == 1:
-                        self.money -= price[next]
+                        money -= price[next]
                         decrease_money(self.id, price[next])
                         enter()
                     else:
@@ -229,8 +223,6 @@ class GasStation:
             print('경호실장: 진입 불가하십니다.')
             enter()
             return
-
-
 
     def open_inventory(self):
         pass
