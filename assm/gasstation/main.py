@@ -1,7 +1,7 @@
-from .libs.module import input_int, enter, clear, shut_down, input_str
+from .libs.module import input_int, enter, clear, shut_down, input_str, beautiful_table
 from .libs.auth import sign_up, sign_in
 from .db import players, auction
-from .db.transaction import load_money, load_diesel, load_gasoline, load_day, load_rating, load_handled_customers, decrease_money, load_items
+from .db.transaction import load_money, load_diesel, load_gasoline, load_day, load_rating, load_handled_customers, decrease_money, load_items, load_price, load_blackmarket_product
 from time import sleep
 
 
@@ -29,9 +29,9 @@ class GasStation:
                 pass
             elif select == 1:
                 while True:
-                    diesel_price = round(self.load_price['diesel'], 2)
-                    gasoline_price = round(self.load_price['gasoline'], 2)
-                    electric_price = round(self.load_price['electric'], 2)
+                    diesel_price = round(load_price['diesel'], 2)
+                    gasoline_price = round(load_price['gasoline'], 2)
+                    electric_price = round(load_price['electric'], 2)
                     print('기름 상점에 오신걸 환영합니다.')
                     print('구매를 희망하는 종류의 ')
                       
@@ -42,7 +42,7 @@ class GasStation:
                 self.go_to_the_next_day()
 
             elif select == 4:
-                pass
+                self.go_to_shop()
 
             elif select == 5:
                 self.auction_house()
@@ -136,6 +136,12 @@ class GasStation:
 """, "잘못된 입력입니다.")
         if select == 1:
             print('구매 가능한 모든 상품의 중류을 출력합니다.')
+            beautiful_table(load_blackmarket_product(), title='상품 목록')
+            select = input_str('구매 하고 싶은 물건의 이름을 적어주세요.\n입력: ', '존재하지 않는 품목입니다. ', [n['name'] for n in load_blackmarket_product()])
+            enter()
+            if load_money() > dict(load_blackmarket_product()):
+
+
         elif select == 2:
             pass
         else:
@@ -145,6 +151,7 @@ class GasStation:
 
     def auction_house(self):
         money = load_money(self.id)
+        print(money)
         if money >= 1000000:
             print('\n사상 최대 규묘의 경매장 The Black Tear에 오신걸 환영합니다.\n회원님의 정보를 동기화 중입니다.')
             
@@ -207,10 +214,10 @@ class GasStation:
                         3: 50000000,
                         2: 150000000,
                         1: 500000000,
-                        0: 1000000000
+                        0: 900000000
                     }
                     print(F'멤버쉽 {next}등급 가격은 {price[next]}만 달러입니다.')
-                    select = input_int(1,2, "1. 구매\n2. 취소", "잘못된 입력입니다.")
+                    select = input_int(1,2, "1. 구매\n2. 취소\n입력: ", "잘못된 입력입니다.")
                     if select == 1:
                         money -= price[next]
                         decrease_money(self.id, price[next])

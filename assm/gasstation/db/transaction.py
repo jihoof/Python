@@ -1,4 +1,4 @@
-from assm.gasstation.db import players, price
+from assm.gasstation.db import players, price, blackmarket
 
 # ------ Load ------
 def load_money(id):
@@ -41,6 +41,8 @@ def load_handled_customers(id):
         'id': id
     }, {'handled_customers': 1, '_id': 0})['handled_customers']
 
+def load_blackmarket_product():
+    return list(blackmarket.find({},{'_id': 0}))
 
 # ------ Edit ------
 def increase_money(id, amount):
