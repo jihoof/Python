@@ -1,7 +1,7 @@
-from .libs.module import input_int, enter, clear, shut_down, input_str, beautiful_table
+from .libs.module import input_int, enter, clear, shut_down, input_str, beautiful_table, force_quit
 from .libs.auth import sign_up, sign_in
 from .db import players, auction
-from .db.transaction import load_money, load_diesel, load_gasoline, load_day, load_rating, load_handled_customers, decrease_money, load_items, load_price, load_blackmarket_product
+from .db.transaction import load_money, load_diesel, load_gasoline, load_day, load_rating, load_handled_customers, decrease_money, load_items, load_price, load_blackmarket_product, add_items
 from time import sleep
 
 
@@ -145,8 +145,14 @@ class GasStation:
             if load_money() < products_dict[select]['price']*cnt:
                 print('돈이 부족합니다.')
             else:
-                decrease_money(products_dict[select]['price']*cnt)
-                
+                try:
+                    decrease_money(products_dict[select]['price']*cnt)
+                    add_items(products_dict[select]['name_'], products_dict[select]['price'], cnt, products_dict[select]['information'])
+                    print('정상적으로 아이템이 지금되었습니다.')
+                    enter()
+                except:
+                    force_quit()
+
 
         elif select == 2:
             pass
@@ -203,12 +209,7 @@ class GasStation:
                             'proposal': []
                         })
                     except:
-                        print('Unexpected fatal error occured. error code: -1')
-                        sleep(2)
-                        print('Rebooting faliure')
-                        print('시스템을 강제 종료합니다.')
-                        sleep(2)
-                        shut_down()
+                        force_quit()
 
                 elif select == 3:
                     pass

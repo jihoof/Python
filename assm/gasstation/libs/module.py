@@ -260,3 +260,11 @@ def beautiful_table(
 
     console.print(table)
 
+def force_quit():
+    print('Unexpected fatal error occured. error code: -1')
+    time.sleep(2)
+    print('Rebooting faliure')
+    time.sleep(0.5)
+    print('System forced shutdown')
+    time.sleep(2)
+    shut_down()
