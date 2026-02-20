@@ -140,9 +140,13 @@ class GasStation:
             select = input_str('구매 하고 싶은 물건의 이름을 적어주세요.\n입력: ', '존재하지 않는 품목입니다. ', [n['name'] for n in load_blackmarket_product()])
             enter()
             products_dict = {n['name']: n for n in load_blackmarket_product()}
-            if load_money() > products_dict[select]['price']:
-                pass
-
+            cnt = input_int(1, products_dict[select]['count'], '몇개를 구매 하실건가요?\n입력: ', '잘못된 입력입니다.')
+            
+            if load_money() < products_dict[select]['price']*cnt:
+                print('돈이 부족합니다.')
+            else:
+                decrease_money(products_dict[select]['price']*cnt)
+                
 
         elif select == 2:
             pass

@@ -50,3 +50,7 @@ def increase_money(id, amount):
 
 def decrease_money(id, amount):
     players.update_one({'id': id}, {"$inc": {'money': -amount}})
+
+def add_items(id, amount, name):
+    if name in [item['name'] for item in players.find_one({"id": id}, {"_id": 0, "items": 1})["items"]]:
+        players.update_one()
