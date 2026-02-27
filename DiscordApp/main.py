@@ -1,1 +1,1 @@
-from conn import *
+from .discord import *
