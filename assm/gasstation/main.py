@@ -142,15 +142,16 @@ class GasStation:
             products_dict = {n['name']: n for n in load_blackmarket_product()}
             cnt = input_int(1, products_dict[select]['count'], '몇개를 구매 하실건가요?\n입력: ', '잘못된 입력입니다.')
             
-            if load_money() < products_dict[select]['price']*cnt:
+            if load_money(self.id) < products_dict[select]['price']*cnt:
                 print('돈이 부족합니다.')
             else:
                 try:
-                    decrease_money(products_dict[select]['price']*cnt)
-                    add_items(products_dict[select]['name_'], products_dict[select]['price'], cnt, products_dict[select]['information'])
+                    decrease_money(self.id, products_dict[select]['price']*cnt)
+                    add_items(self.id, cnt, products_dict[select]['name'], products_dict[select]['information'], products_dict[select]['price'])
                     print('정상적으로 아이템이 지금되었습니다.')
                     enter()
-                except:
+                except Exception as e:
+                    print(e)
                     force_quit()
 
 
