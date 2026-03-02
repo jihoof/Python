@@ -19,12 +19,12 @@ def load_gasoline(id):
 def load_price():
     return price.find_one({
             'price': {'$exists': True}
-    }, {'price':1, '_id': 0})
+    }, {'price':1, '_id': 0})['price']
 
 def load_items(id):
     return players.find_one({
         'id': id
-    }, {'items': 1, '_id': 0})
+    }, {'items': 1, '_id': 0})['items']
 
 def load_day(id):
     return players.find_one({

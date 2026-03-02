@@ -128,12 +128,10 @@ class GasStation:
 
     def go_to_shop(self):
         print('사상 최대 규모의 암시장, 블랙마켓에 오신걸 환영합니다.')
-        select = input_int(1,3,"""
+        select = input_int(1,2,"""
 1. 상품 보기
-2. 블랙마켓 지분 인수하기
-3. 블랙마켓 나가기
-입력: 
-""", "잘못된 입력입니다.")
+2. 블랙마켓 나가기
+입력: """, "잘못된 입력입니다.")
         if select == 1:
             print('구매 가능한 모든 상품의 중류을 출력합니다.')
             beautiful_table(load_blackmarket_product(), title='상품 목록')
@@ -153,10 +151,6 @@ class GasStation:
                 except Exception as e:
                     print(e)
                     force_quit()
-
-
-        elif select == 2:
-            pass
         else:
             print('주유소로 복귀합니다.')
             enter()
@@ -181,7 +175,7 @@ class GasStation:
             
             enter()
             while True:
-                select = input_int(1, 4,"1. 경매장 나가기\n2. 상품 등록\n3. 상품 구매 \n4. 멤버쉽 구매", '잘못된 입력입니다.')
+                select = input_int(1, 4,"1. 경매장 나가기\n2. 상품 등록\n3. 상품 구매 \n4. 멤버쉽 구매 \n입력: ", '잘못된 입력입니다.')
                 
                 if select == 1:
                     print('\n경매장을 나갑니다.')
@@ -190,7 +184,7 @@ class GasStation:
                 elif select == 2:
                     print('\n현재 보유중인 모든 아이템, 기름, 차량을 출력합니다.')
                     diesel = load_diesel(self.id)   
-                    gasoline = load_gasoline(self.id)
+                    gasoline = load_gasoline(self.id)  
                     items = load_items(self.id)    
                     
                     print("-"*8 + "INVENTORY" + "-"*8)
@@ -200,20 +194,30 @@ class GasStation:
                     print("-"*22)
                     
                     select = input_str('입력: ', '잘못된 입력입니다.', ['가솔린', '디젤'] + [key['name'] for key in load_items(self.id)])
-                    select2 = input_int(10000, 9**99, '상품의 가격을 입력하세요: ', '최소가격 미달 또는 상한 초과.')
-                    select3 = input('상품 설명을 입력하세요.')
+                    select2 = input_int(10000, 9**99, '상품의 최소 가격을 입력하세요: ', '최소가격 미달 또는 상한 초과.')
+                    select3 = input('상품 설명을 입력하세요: ')
+                    select4 = input_int(3600, 43200, '경매가 지속될 시간을 입력해 주세요(최소 1시간, 최대 12시간, 1시간 단위): ', '잘못된 입력입니다.')
                     try:
                         auction.insert_one({
+                            'saler': self.id,
                             'name': select,
-                            'price': select2,
+                            'lowest_price': select2,
                             'product_introduce': select3,
-                            'proposal': []
+                            'proposal': [],
+                            'time_left': select4
                         })
+                        print('상품이 제대로 등록 되었어요.')
+                        enter()
                     except:
                         force_quit()
 
                 elif select == 3:
-                    pass
+                    print('반갑습니다, 고객님. 저는 오늘 고객님의 경매를 도와줄 경매사 릭 하네시입니다.')
+                    print('현재 입찰 중인 물건들을 전부 표시하겠습니다.')
+                    print()
+                    beautiful_table(list(auction.find({},{'_id': 0})), title='입찰 중인 상품')
+                    enter()
+                
                 else:
                     next = auction_house_membership - 1
                     print(f'현재 회원 등급: {auction_house_membership}, 다음 등급: {next}')

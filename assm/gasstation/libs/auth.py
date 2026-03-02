@@ -51,7 +51,7 @@ def sign_in():
         info = players.find_one({"id" : nickname})
         if not info:
             print("유저가 존재하지 않습니다")
-            break
+            return info, False
             
         salt = info['salt']
         encrypted_password = hash_password(password, salt)
