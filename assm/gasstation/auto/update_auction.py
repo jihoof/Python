@@ -6,15 +6,14 @@ def auction_server():
         time.sleep(60)
         auction.update_many({},{'$inc': {'time_left': -60}})
         auction_ = list(auction.find())
-        for i in auction_:
-            if i['time_left'] <= 0:
-                for j in i['proposal']:
-                    tmp = j
-                    if j > tmp:
-                        max_ = j
-                players.update_one({'id': i['saler']}, {'$inc': {'money': max_}})
+        for product in auction_:
+            if product['time_left'] <= 0:
+                max_price = 0
+                target_user = None
+                for user in product['proposal']:
+                    if user['price'] > max_price:
+                        target_user = user
+                players.update_one({'id': product['saler']}, {'$inc': {'money': max_}})
                 players.update_one    
-                auction.delete_one({'name': i['name']})
+                auction.delete_one({'name': product['name']})
 
-
-id : 10
