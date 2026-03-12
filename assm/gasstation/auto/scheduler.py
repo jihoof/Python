@@ -1,4 +1,4 @@
-from update_auction import *
+from .update_auction import *
 
-time_decrease()
+auction_server()
 

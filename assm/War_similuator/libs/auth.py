@@ -28,17 +28,6 @@ def sign_up():
         'id' : nickname,
         'password' :  encrypted_password, 
         'salt': salt,
-        'items': [],
-        'bought_upgrades': [],
-        'money': 100000000,
-        'diesel': 0,
-        'gasoline': 0,
-        'cars': [],
-        'auction_house_membership_level': 5,
-        'day': 0,
-        'rate': 0,
-        'handled_customers': 0,
-        'multiplier': 1.0
     })
     print('정상적으로 계정이 생성되었습니다.')
     module.enter()

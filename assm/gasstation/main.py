@@ -196,7 +196,7 @@ class GasStation:
                     select = input_str('입력: ', '잘못된 입력입니다.', ['가솔린', '디젤'] + [key['name'] for key in load_items(self.id)])
                     select2 = input_int(10000, 9**99, '상품의 최소 가격을 입력하세요: ', '최소가격 미달 또는 상한 초과.')
                     select3 = input('상품 설명을 입력하세요: ')
-                    select4 = input_int(3600, 43200, '경매가 지속될 시간을 입력해 주세요(최소 1시간, 최대 12시간, 1시간 단위): ', '잘못된 입력입니다.')
+                    select4 = input_int(180, 43200, '경매가 지속될 시간을 입력해 주세요(최소 1시간, 최대 12시간, 1시간 단위): ', '잘못된 입력입니다.')
                     try:
                         auction.insert_one({
                             'saler': self.id,
@@ -216,8 +216,20 @@ class GasStation:
                     print('현재 입찰 중인 물건들을 전부 표시하겠습니다.')
                     print()
                     beautiful_table(list(auction.find({},{'_id': 0})), title='입찰 중인 상품')
+                    name = input_str('입찰 하고 싶은 상품의 이름을 입력하세요: ', '존재하지 않는 상품입니다.', [item['name'] for item in list(auction.find())])
                     enter()
-                
+                    print('현재 입찰 중인 제안을 모두 출력 합니다.')
+                    beautiful_table(auction.find_one({}, {'_id':0, 'proposal': 1})['proposal'], title='입찰 수')
+                    select = input_int(auction.find_one({'name': name}, {'_id': 0, 'lowest_price':1})['lowest_price'], 9**99, '입찰 할 가격을 입력하세요: ', '상한 또는 하한 초과.')
+                    try:
+                        auction.update_one({
+                            'name': name}, {'$push': {'proposal': {
+                                'buyer': self.id,
+                                'price': select}}
+                            })
+                    except:
+                        force_quit()
+
                 else:
                     next = auction_house_membership - 1
                     print(f'현재 회원 등급: {auction_house_membership}, 다음 등급: {next}')

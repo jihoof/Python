@@ -61,3 +61,14 @@ def add_items(id, amount, name, information, base_price):
         items.append({"name": name, "cnt": amount, "price":base_price, "information": information})
 
     players.update_one({"id": id}, {"$set": {"items": items}})
+
+def decrease_items(id, amount, name):
+    items = players.find_one({"id": id}, {"_id": 0, "items": 1})["items"]
+    if name in [item['name'] for item in items]:
+        for item in items:
+            if item["name"] == name:
+                item["cnt"] -= amount
+                if item["cnt"] <= 0:
+                    items.remove(item)
+
+    players.update_one({"id": id}, {"$set": {"items": items}})
