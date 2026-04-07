@@ -81,3 +81,5 @@ def clean_doc(listt):
 
 def print_(strr):
     print(json.dumps(clean_doc(strr), indent=3))
+
+
